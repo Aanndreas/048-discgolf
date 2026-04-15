@@ -60,6 +60,7 @@ export default function Summary() {
 
   return (
     <div className="page">
+      <button className="btn-ghost" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/')}>← Hem</button>
       <CelebrationScreen players={players} scores={scores} courseName={courseName} date={date} />
 
       {/* ── Per-player stats ── */}

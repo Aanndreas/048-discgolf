@@ -57,6 +57,7 @@ export default function Setup() {
 
   return (
     <div className="page">
+      <button className="btn-ghost" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/')}>← Hem</button>
       <h1>Ny runda</h1>
 
       {/* ── Course selection ── */}

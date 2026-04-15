@@ -63,8 +63,15 @@ export default function Game() {
   return (
     <div className="page" style={{ gap: 0 }}>
 
-      {/* ── Status bar — pure info, no interactive elements ── */}
+      {/* ── Status bar ── */}
       <div style={{ paddingTop: 8, paddingBottom: 16 }}>
+        <button
+          className="btn-ghost"
+          style={{ alignSelf: 'flex-start', padding: '2px 0', fontSize: '0.75rem', opacity: 0.5, marginBottom: 6 }}
+          onClick={() => navigate('/')}
+        >
+          ← Hem
+        </button>
         <div style={{
           display: 'flex',
           alignItems: 'center',
