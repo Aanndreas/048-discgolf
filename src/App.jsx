@@ -5,6 +5,7 @@ import Setup from './pages/Setup'
 import Game from './pages/Game'
 import Summary from './pages/Summary'
 import History from './pages/History'
+import HistoryDetail from './pages/HistoryDetail'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/game" element={<Game />} />
           <Route path="/summary" element={<Summary />} />
           <Route path="/history" element={<History />} />
+          <Route path="/history/:id" element={<HistoryDetail />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
