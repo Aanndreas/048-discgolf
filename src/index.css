@@ -1,64 +1,642 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #1a1a2e;
-  --surface: #16213e;
-  --accent: #0f3460;
-  --highlight: #e94560;
-  --text: #eaeaea;
-  --text-muted: #888;
-  --radius: 12px;
-  --gap: 16px;
+  /* --- Palette --- */
+  --bg:         #080A0E;
+  --surface:    #0E1116;
+  --surface-2:  #141820;
+  --surface-3:  #1B2029;
+  --border:     rgba(255,255,255,0.06);
+  --border-hi:  rgba(255,255,255,0.11);
+
+  --accent:     #2EE87A;   /* electric mint — one clean accent, used sparingly */
+  --accent-dim: rgba(46,232,122,0.09);
+  --accent-glow:rgba(46,232,122,0.18);
+
+  --text:   #EDEEED;
+  --text-2: #8A95A3;
+  --text-3: #52606E;
+
+  --red:    #FF3550;
+  --red-dim:rgba(255,53,80,0.10);
+
+  --winner: #F5C842;   /* only for winner/celebration moments */
+
+  /* --- Typography --- */
+  --font-display: 'Barlow Condensed', sans-serif;  /* scores, numbers */
+  --font-ui:      'DM Sans', -apple-system, sans-serif;
+
+  /* --- Spacing & Shape --- */
+  --r:    10px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --gap:  14px;
+  --pad:  20px;
 }
 
+/* ============================================================
+   BASE
+============================================================ */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-ui);
+  font-weight: 400;
   background: var(--bg);
   color: var(--text);
   min-height: 100dvh;
-  max-width: 480px;
-  margin: 0 auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Responsive container: mobile-first, caps at 520px, centers on larger screens */
+#root {
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  position: relative;
+}
+
+/* On larger screens, show a subtle app frame */
+@media (min-width: 560px) {
+  body {
+    background: #050608;
+  }
+  #root {
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+}
+
+/* ============================================================
+   TYPOGRAPHY
+============================================================ */
+h1 {
+  font-family: var(--font-ui);
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+h2 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+/* Big condensed numerals — hole numbers, scores */
+.num {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.num-xl {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  line-height: 0.88;
+}
+
+/* Course name badge */
+.course-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border: 1px solid rgba(46,232,122,0.18);
+  border-radius: 100px;
+  padding: 4px 10px;
+}
+
+/* ============================================================
+   LAYOUT
+============================================================ */
+.page {
+  padding: var(--pad);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  min-height: 100dvh;
+}
+
+.card {
+  background: var(--surface-2);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+}
+
+.card-hi {
+  background: var(--surface-3);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border-hi);
+  padding: 14px 16px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 2px 0;
+}
+
+/* ============================================================
+   BUTTONS
+============================================================ */
 button {
   cursor: pointer;
   border: none;
-  border-radius: var(--radius);
-  font-size: 1rem;
-  font-family: inherit;
-  padding: 12px 20px;
-  background: var(--accent);
+  border-radius: var(--r);
+  font-size: 0.9375rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  padding: 13px 20px;
+  background: var(--surface-3);
   color: var(--text);
-  transition: opacity 0.15s;
+  transition: opacity 0.12s, transform 0.1s, background 0.12s;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
-button:active { opacity: 0.7; }
-button:hover:not(:disabled) { opacity: 0.85; }
-button:disabled { opacity: 0.4; cursor: default; }
 
-.btn-primary { background: var(--highlight); font-weight: 600; }
-.btn-danger { background: #8b1a2a; }
+button:hover:not(:disabled) { opacity: 0.88; }
+button:active:not(:disabled) { transform: scale(0.965); opacity: 0.8; }
+button:disabled { opacity: 0.28; cursor: default; }
+
+.btn-primary {
+  background: var(--accent);
+  color: #05080C;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
 .btn-ghost {
   background: transparent;
-  border: 1px solid var(--text-muted);
-  padding: 8px 14px;
-  font-size: 0.875rem;
+  border: 1px solid var(--border-hi);
+  color: var(--text-2);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 10px 16px;
 }
-
-input, select {
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  border-radius: var(--radius);
+.btn-ghost:hover:not(:disabled) {
+  background: var(--surface-2);
   color: var(--text);
-  font-size: 1rem;
-  font-family: inherit;
-  padding: 10px 14px;
-  width: 100%;
+  opacity: 1;
 }
-input:focus, select:focus { outline: 2px solid var(--highlight); }
 
-h1 { font-size: 1.75rem; font-weight: 700; }
-h2 { font-size: 1.25rem; font-weight: 600; }
+.btn-icon {
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--text);
+  flex-shrink: 0;
+}
 
-.page { padding: var(--gap); display: flex; flex-direction: column; gap: var(--gap); min-height: 100dvh; }
-.card { background: var(--surface); border-radius: var(--radius); padding: var(--gap); }
-.row { display: flex; align-items: center; gap: 8px; }
+.btn-danger {
+  background: var(--red-dim);
+  border: 1px solid rgba(255,53,80,0.18);
+  color: var(--red);
+  font-weight: 500;
+}
+.btn-danger:hover:not(:disabled) {
+  background: rgba(255,53,80,0.15);
+  opacity: 1;
+}
+
+/* ============================================================
+   INPUTS
+============================================================ */
+input, select {
+  background: var(--surface-2);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-family: var(--font-ui);
+  font-weight: 400;
+  padding: 13px 16px;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  -webkit-appearance: none;
+}
+input::placeholder { color: var(--text-3); }
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* ============================================================
+   SCORE ROW — used in Game page
+============================================================ */
+.score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  gap: 12px;
+  transition: border-color 0.15s;
+}
+.score-row:has(.score-value:not([data-empty])) {
+  border-color: var(--border-hi);
+}
+
+.score-player-name {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.score-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.score-value {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 2.25rem;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  min-width: 48px;
+  text-align: center;
+  line-height: 1;
+}
+.score-value.is-empty {
+  color: var(--text-3);
+  font-size: 1.5rem;
+}
+
+/* Inline score edit input */
+.score-input-inline {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 2.25rem;
+  width: 64px;
+  min-width: 64px;
+  text-align: center;
+  background: var(--surface-3);
+  border: 1px solid var(--accent);
+  border-radius: var(--r);
+  color: var(--text);
+  padding: 2px 4px;
+  line-height: 1;
+  box-shadow: 0 0 0 3px var(--accent-dim);
+  -moz-appearance: textfield;
+}
+.score-input-inline::-webkit-inner-spin-button,
+.score-input-inline::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+/* Score pop animation — triggered by key change on the span */
+@keyframes scorePop {
+  0%   { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+.score-pop {
+  animation: scorePop 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.score-btn {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  font-size: 1.5rem;
+  font-weight: 400;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  transition: color 0.12s, background 0.12s, transform 0.1s;
+}
+.score-btn:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--surface-3);
+  opacity: 0.9;
+}
+.score-btn.increment:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: rgba(46,232,122,0.25);
+}
+
+/* ============================================================
+   SCORECARD TABLE
+============================================================ */
+.scorecard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.scorecard-table th {
+  padding: 7px 6px;
+  background: var(--surface-3);
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--border-hi);
+}
+.scorecard-table th.active-col {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+.scorecard-table th.player-col {
+  text-align: left;
+  padding-left: 12px;
+  font-family: var(--font-ui);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.scorecard-table td {
+  padding: 8px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+.scorecard-table td.active-col {
+  background: rgba(46,232,122,0.05);
+  color: var(--accent);
+}
+.scorecard-table td.player-col {
+  text-align: left;
+  padding-left: 12px;
+  font-family: var(--font-ui);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.scorecard-table td.empty-score {
+  color: var(--text-3);
+  font-size: 0.75rem;
+}
+.scorecard-table td.total-col {
+  font-weight: 900;
+  color: var(--text);
+}
+.scorecard-table tr:last-child td { border-bottom: none; }
+
+/* ============================================================
+   SCORECARD 3D FLIP
+============================================================ */
+.flip-viewport {
+  perspective: 1400px;
+}
+
+.flip-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.34, 1.08, 0.64, 1);
+}
+
+.flip-inner.is-flipped {
+  transform: rotateY(-180deg);
+}
+
+.flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip-face-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  overflow-y: auto;
+  /* Prevent content from being interactive when face-down */
+  pointer-events: none;
+}
+
+.flip-inner.is-flipped .flip-face-back {
+  pointer-events: auto;
+}
+.flip-inner.is-flipped .flip-face:not(.flip-face-back) {
+  pointer-events: none;
+}
+
+/* ============================================================
+   CELEBRATION / SUMMARY
+============================================================ */
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  gap: 12px;
+}
+.leaderboard-row.is-winner {
+  background: linear-gradient(135deg, rgba(245,200,66,0.08), rgba(245,200,66,0.03));
+  border-color: rgba(245,200,66,0.25);
+}
+
+.rank-badge {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--text-3);
+  width: 32px;
+  flex-shrink: 0;
+  text-align: center;
+}
+.rank-badge.rank-1 { color: var(--winner); }
+.rank-badge.rank-2 { color: #B8BEC8; }
+.rank-badge.rank-3 { color: #8B6E4A; }
+
+.leaderboard-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.leaderboard-score {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.75rem;
+  color: var(--text);
+}
+.leaderboard-row.is-winner .leaderboard-score {
+  color: var(--winner);
+}
+
+/* ============================================================
+   CELEBRATION ANIMATIONS
+============================================================ */
+@keyframes celebrateIn {
+  0%   { opacity: 0; transform: scale(0.72) translateY(16px); }
+  65%  { opacity: 1; transform: scale(1.04) translateY(-3px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes nameGlow {
+  0%, 100% { text-shadow: none; }
+  50%       { text-shadow: 0 0 28px rgba(237,238,237,0.25); }
+}
+
+.celebrate-block {
+  animation: celebrateIn 0.55s cubic-bezier(0.34, 1.4, 0.64, 1) 0.05s both;
+}
+
+.celebrate-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--winner);
+  margin-bottom: 6px;
+}
+
+.celebrate-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 5rem;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  animation: nameGlow 1.8s ease-in-out 0.65s 2;
+}
+
+.celebrate-kast {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--winner);
+  opacity: 0.75;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 12px;
+}
+
+.celebrate-line {
+  width: 48px;
+  height: 2px;
+  background: var(--winner);
+  border-radius: 2px;
+  margin: 16px auto 0;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   STAT PILLS — par distribution in summary
+============================================================ */
+.stat-pill {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 7px 4px;
+  border-radius: var(--r);
+  border: 1px solid transparent;
+}
+.stat-pill--under {
+  background: rgba(46,232,122,0.07);
+  border-color: rgba(46,232,122,0.15);
+}
+.stat-pill--on {
+  background: var(--surface-3);
+  border-color: var(--border);
+}
+.stat-pill--over {
+  background: rgba(255,53,80,0.06);
+  border-color: rgba(255,53,80,0.14);
+}
+.stat-pill-val {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.stat-pill--under .stat-pill-val { color: var(--accent); }
+.stat-pill--on    .stat-pill-val { color: var(--text-2); }
+.stat-pill--over  .stat-pill-val { color: var(--red); }
+.stat-pill-lbl {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+/* ============================================================
+   HISTORY LIST
+============================================================ */
+.history-entry {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.15s;
+}
+.history-entry:hover {
+  border-color: var(--border-hi);
+}
+.history-course {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.history-meta {
+  font-size: 0.8125rem;
+  color: var(--text-2);
+}
+
+/* ============================================================
+   NAV BAR (bottom action strip)
+============================================================ */
+.nav-strip {
+  display: flex;
+  gap: 10px;
+  padding-top: 4px;
+  margin-top: auto;
+}
+.nav-strip button {
+  flex: 1;
+  padding: 15px 12px;
+}
