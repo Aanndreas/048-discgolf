@@ -121,54 +121,54 @@ export default function Game() {
       {/* ── Interactive zone — all thumb-reachable ── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 0 }}>
 
-        {/* Flip container */}
-        <div className="flip-viewport">
-          <div
-            className={`flip-inner ${showScorecard ? 'is-flipped' : ''}`}
-            style={{ minHeight: flipMinHeight }}
-          >
-            {/* Front face — score rows, sorted leader first */}
-            <div className="flip-face" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {sortedPlayers.map(player => (
-                <PlayerScoreRow
-                  key={player}
-                  player={player}
-                  score={getScore(player)}
-                  lastChanged={lastChanged[player] ?? null}
-                  onIncrement={(amount) => handleIncrement(player, amount)}
-                  onDecrement={() => handleDecrement(player)}
-                  onSetScore={(val) => handleSetScore(player, val)}
-                />
-              ))}
-              <ScorePanel scores={scores} players={players} />
-            </div>
+        {/* Flip container — dog-ear in bottom-right corner toggles scorecard */}
+        <div style={{ position: 'relative' }}>
+          <div className="flip-viewport">
+            <div
+              className={`flip-inner ${showScorecard ? 'is-flipped' : ''}`}
+              style={{ minHeight: flipMinHeight }}
+            >
+              {/* Front face — score rows, sorted leader first */}
+              <div className="flip-face" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {sortedPlayers.map(player => (
+                  <PlayerScoreRow
+                    key={player}
+                    player={player}
+                    score={getScore(player)}
+                    lastChanged={lastChanged[player] ?? null}
+                    onIncrement={(amount) => handleIncrement(player, amount)}
+                    onDecrement={() => handleDecrement(player)}
+                    onSetScore={(val) => handleSetScore(player, val)}
+                  />
+                ))}
+                <ScorePanel scores={scores} players={players} />
+              </div>
 
-            {/* Back face — poängkort */}
-            <div className="flip-face flip-face-back">
-              <div style={{
-                background: 'var(--surface-2)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--r-lg)',
-                overflow: 'hidden',
-              }}>
-                <Scorecard scores={scores} players={players} holes={holes} currentHole={currentHole} />
+              {/* Back face — poängkort */}
+              <div className="flip-face flip-face-back">
+                <div style={{
+                  background: 'var(--surface-2)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--r-lg)',
+                  overflow: 'hidden',
+                }}>
+                  <Scorecard scores={scores} players={players} holes={holes} currentHole={currentHole} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Poängkort toggle — below the score list */}
-        <button
-          className="btn-ghost"
-          style={{ width: '100%', gap: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          onClick={() => setShowScorecard(s => !s)}
-        >
-          {showScorecard ? (
-            <><span style={{ fontSize: '0.9em' }}>◀</span> Poäng</>
-          ) : (
-            <>Poängkort <span style={{ fontSize: '0.9em' }}>▶</span></>
-          )}
-        </button>
+          {/* Dog-ear fold tab */}
+          <button
+            className="fold-tab"
+            onClick={() => setShowScorecard(s => !s)}
+            aria-label={showScorecard ? 'Visa poäng' : 'Visa poängkort'}
+          >
+            <span className="fold-tab-icon">
+              {showScorecard ? '◀' : '▶'}
+            </span>
+          </button>
+        </div>
 
         {/* Navigation */}
         <div className="nav-strip">
