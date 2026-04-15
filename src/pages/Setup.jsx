@@ -59,22 +59,54 @@ export default function Setup() {
     <div className="page">
       <h1>Ny runda</h1>
 
+      {/* ── Course selection ── */}
       <section>
-        <h2 style={{ marginBottom: 8 }}>Välj bana</h2>
+        <h2 style={{ marginBottom: 12 }}>Välj bana</h2>
         <CourseSelector
           courses={allCourses}
           onSelect={setSelectedCourse}
           onAddCourse={handleAddCourse}
         />
-        {selectedCourse && (
-          <p style={{ marginTop: 8, color: 'var(--highlight)' }}>
-            ✓ {selectedCourse.name} ({selectedCourse.holes} hål)
-          </p>
-        )}
+        <div style={{
+          marginTop: 10,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          background: selectedCourse ? 'var(--accent-dim)' : 'var(--surface-2)',
+          border: `1px solid ${selectedCourse ? 'rgba(46,232,122,0.2)' : 'var(--border)'}`,
+          borderRadius: 'var(--r-lg)',
+          padding: '12px 16px',
+          transition: 'background 0.2s, border-color 0.2s',
+        }}>
+          {selectedCourse ? (
+            <>
+              <span style={{ color: 'var(--accent)', fontSize: '1rem', lineHeight: 1 }}>✓</span>
+              <div>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.5rem', color: 'var(--text)', letterSpacing: '-0.01em', lineHeight: 1 }}>
+                  {selectedCourse.name}
+                </div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--accent)', marginTop: 4, fontWeight: 500 }}>
+                  {selectedCourse.holes} hål
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <span style={{ fontSize: '1rem', lineHeight: 1, color: 'var(--text-3)' }}>○</span>
+              <div style={{ fontSize: '0.9375rem', color: 'var(--text-3)', fontStyle: 'italic' }}>
+                Vald bana: —
+              </div>
+            </>
+          )}
+        </div>
       </section>
 
+      {/* ── Extra breathing room between sections ── */}
+      <div style={{ height: 8 }} />
+
+      {/* ── Player selection ── */}
       <section>
-        <h2 style={{ marginBottom: 8 }}>Spelare</h2>
+        <h2 style={{ marginBottom: 12 }}>Spelare</h2>
         <PlayerSelector
           players={players}
           favorites={playerData.favorites}
