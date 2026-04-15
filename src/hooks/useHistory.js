@@ -34,6 +34,11 @@ export function useHistory() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!supabase) {
+      setLoading(false)
+      return
+    }
+
     async function init() {
       // One-time migration from localStorage
       try {
@@ -62,16 +67,19 @@ export function useHistory() {
   }, [])
 
   async function saveRound(entry) {
+    if (!supabase) return
     const { error } = await supabase.from('rounds').insert(entryToRow(entry))
     if (!error) setHistory(prev => [entry, ...prev])
   }
 
   async function deleteRound(id) {
+    if (!supabase) return
     const { error } = await supabase.from('rounds').delete().eq('id', id)
     if (!error) setHistory(prev => prev.filter(e => e.id !== id))
   }
 
   async function deleteAllRounds() {
+    if (!supabase) return
     const { error } = await supabase.from('rounds').delete().neq('id', '')
     if (!error) setHistory([])
   }
