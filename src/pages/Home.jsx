@@ -4,7 +4,13 @@ import logo from '../assets/images/048_logo_png.png'
 
 export default function Home() {
   const navigate = useNavigate()
-  const { state } = useGame()
+  const { state, dispatch } = useGame()
+
+  function handleAbandon() {
+    if (confirm('Avbryta pågående runda? Poängen sparas inte.')) {
+      dispatch({ type: 'CLEAR_GAME' })
+    }
+  }
 
   return (
     <div className="page" style={{ justifyContent: 'center', minHeight: '100dvh' }}>
@@ -49,25 +55,42 @@ export default function Home() {
         </button>
 
         {state && (
-          <button
-            style={{
-              width: '100%',
-              padding: '14px 20px',
-              borderRadius: 'var(--r-lg)',
-              background: 'var(--surface-2)',
-              border: '1px solid var(--border-hi)',
-              textAlign: 'left',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 3,
-            }}
-            onClick={() => navigate('/game')}
-          >
-            <span style={{ fontWeight: 600, color: 'var(--text)' }}>Fortsätt pågående runda</span>
-            <span style={{ fontSize: '0.8125rem', color: 'var(--text-2)', fontWeight: 400 }}>
-              {state.courseName} · Hål {state.currentHole + 1} / {state.holes}
-            </span>
-          </button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              style={{
+                flex: 1,
+                padding: '14px 20px',
+                borderRadius: 'var(--r-lg)',
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border-hi)',
+                textAlign: 'left',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 3,
+              }}
+              onClick={() => navigate('/game')}
+            >
+              <span style={{ fontWeight: 600, color: 'var(--text)' }}>Fortsätt pågående runda</span>
+              <span style={{ fontSize: '0.8125rem', color: 'var(--text-2)', fontWeight: 400 }}>
+                {state.courseName} · Hål {state.currentHole + 1} / {state.holes}
+              </span>
+            </button>
+            <button
+              onClick={handleAbandon}
+              style={{
+                padding: '0 14px',
+                borderRadius: 'var(--r-lg)',
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border-hi)',
+                color: 'var(--red)',
+                fontSize: '1.1rem',
+                flexShrink: 0,
+              }}
+              aria-label="Avbryt runda"
+            >
+              ✕
+            </button>
+          </div>
         )}
 
         <button

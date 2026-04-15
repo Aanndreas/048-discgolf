@@ -197,6 +197,20 @@ export default function Game() {
           )}
         </div>
 
+        {/* Abandon */}
+        <button
+          className="btn-ghost"
+          style={{ width: '100%', color: 'var(--red)', opacity: 0.6, fontSize: '0.8125rem' }}
+          onClick={() => {
+            if (confirm('Avbryta rundan? Poängen sparas inte.')) {
+              dispatch({ type: 'CLEAR_GAME' })
+              navigate('/')
+            }
+          }}
+        >
+          Avbryt runda
+        </button>
+
       </div>
 
     </div>
