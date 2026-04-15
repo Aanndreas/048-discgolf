@@ -5,25 +5,39 @@ export function CelebrationScreen({ players, scores, courseName, date }) {
   const totals = getAllTotals(scores, players)
   const sorted = [...players].sort((a, b) => totals[a] - totals[b])
 
+  const rankClass = ['rank-1', 'rank-2', 'rank-3', '', '', '']
+
   return (
-    <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <div style={{ fontSize: '3rem' }}>🏆</div>
-      <h1>Grattis {winner}!</h1>
-      <p style={{ color: 'var(--text-muted)' }}>{courseName} · {date}</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+      {/* ── Celebration hero ── */}
+      <div data-testid="celebration-hero" style={{ textAlign: 'center', paddingTop: 8 }}>
+        <span className="course-badge" style={{ marginBottom: 20, display: 'inline-flex' }}>
+          {courseName} · {date}
+        </span>
+
+        <div className="celebrate-block">
+          <div className="celebrate-label">Grattis</div>
+          <div className="celebrate-name">{winner}!</div>
+          <div className="celebrate-kast">{totals[winner]} kast</div>
+        </div>
+
+        <div className="celebrate-line" />
+      </div>
+
+      {/* ── Leaderboard ── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {sorted.map((player, i) => (
-          <div
-            key={player}
-            className="card row"
-            style={{ justifyContent: 'space-between', opacity: i === 0 ? 1 : 0.75 }}
-          >
-            <span>
-              {i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'} {player}
+          <div key={player} className={`leaderboard-row ${i === 0 ? 'is-winner' : ''}`}>
+            <span className={`rank-badge ${rankClass[i] || ''}`}>
+              {i + 1}
             </span>
-            <span style={{ fontWeight: 700, fontSize: '1.25rem' }}>{totals[player]}</span>
+            <span className="leaderboard-name">{player}</span>
+            <span className="leaderboard-score">{totals[player]}</span>
           </div>
         ))}
       </div>
+
     </div>
   )
 }

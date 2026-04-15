@@ -26,11 +26,13 @@ export function CourseSelector({ courses, onSelect, onAddCourse }) {
         <button
           key={course.id}
           className="btn-ghost"
-          style={{ textAlign: 'left' }}
+          style={{ textAlign: 'left', padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
           onClick={() => onSelect(course)}
         >
-          {course.name}
-          <span style={{ color: 'var(--text-muted)', float: 'right' }}>
+          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.5rem', color: 'var(--text)', letterSpacing: '-0.01em', lineHeight: 1 }}>
+            {course.name}
+          </span>
+          <span style={{ color: 'var(--text-2)', fontWeight: 500, fontSize: '0.875rem', flexShrink: 0 }}>
             {course.holes} hål
           </span>
         </button>
