@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useHistory } from '../hooks/useHistory'
 import { CelebrationScreen } from '../components/CelebrationScreen'
 import { Scorecard } from '../components/Scorecard'
 import { getPlayerStats, getAllTotals } from '../utils/scoring'
@@ -16,7 +16,7 @@ function formatRelPar(n) {
 export default function HistoryDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [history] = useLocalStorage('udisk_history', [])
+  const { history } = useHistory()
   const [showStats, setShowStats] = useState(false)
   const [showScorecard, setShowScorecard] = useState(false)
 

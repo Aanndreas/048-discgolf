@@ -1,15 +1,28 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import { vi, beforeEach } from 'vitest'
 import History from '../pages/History'
+import { useHistory } from '../hooks/useHistory'
 
-const mockHistory = [
-  { id: '1', courseName: 'Mora', date: '2026-04-14', winner: 'Anton', players: ['Anton', 'Ludde'], scores: {} },
+const mockDelete = vi.fn()
+const mockDeleteAll = vi.fn()
+
+const mockHistoryData = [
+  { id: '1', courseName: 'Hemus', date: '2026-04-14', winner: 'Anton', players: ['Anton', 'Ludde'], scores: {} },
   { id: '2', courseName: 'Orsa', date: '2026-04-13', winner: 'Ludde', players: ['Anton', 'Ludde'], scores: {} },
 ]
 
+vi.mock('../hooks/useHistory', () => ({
+  useHistory: vi.fn(),
+}))
+
 beforeEach(() => {
-  localStorage.clear()
-  localStorage.setItem('udisk_history', JSON.stringify(mockHistory))
+  vi.mocked(useHistory).mockReturnValue({
+    history: mockHistoryData,
+    loading: false,
+    deleteRound: mockDelete,
+    deleteAllRounds: mockDeleteAll,
+  })
 })
 
 function renderHistory() {
@@ -18,27 +31,29 @@ function renderHistory() {
 
 test('shows saved rounds', () => {
   renderHistory()
-  expect(screen.getByText('Mora')).toBeInTheDocument()
+  expect(screen.getByText('Hemus')).toBeInTheDocument()
   expect(screen.getByText('Orsa')).toBeInTheDocument()
 })
 
 test('can delete a single round', () => {
   renderHistory()
-  const deleteButtons = screen.getAllByText('Ta bort')
-  fireEvent.click(deleteButtons[0])
-  const history = JSON.parse(localStorage.getItem('udisk_history'))
-  expect(history).toHaveLength(1)
-  expect(history[0].id).toBe('2')
+  fireEvent.click(screen.getAllByText('Ta bort')[0])
+  expect(mockDelete).toHaveBeenCalledWith('1')
 })
 
 test('can clear all history', () => {
   renderHistory()
   fireEvent.click(screen.getByText('Rensa all historik'))
-  expect(JSON.parse(localStorage.getItem('udisk_history'))).toHaveLength(0)
+  expect(mockDeleteAll).toHaveBeenCalled()
 })
 
 test('shows empty message when no history', () => {
-  localStorage.setItem('udisk_history', JSON.stringify([]))
+  vi.mocked(useHistory).mockReturnValue({
+    history: [],
+    loading: false,
+    deleteRound: mockDelete,
+    deleteAllRounds: mockDeleteAll,
+  })
   renderHistory()
   expect(screen.getByText(/inga sparade rundor/i)).toBeInTheDocument()
 })

@@ -1,18 +1,10 @@
 import { useNavigate } from 'react-router-dom'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useHistory } from '../hooks/useHistory'
 import { HistoryList } from '../components/HistoryList'
 
 export default function History() {
   const navigate = useNavigate()
-  const [history, setHistory] = useLocalStorage('udisk_history', [])
-
-  function handleDelete(id) {
-    setHistory(prev => prev.filter(e => e.id !== id))
-  }
-
-  function handleDeleteAll() {
-    setHistory([])
-  }
+  const { history, loading, deleteRound, deleteAllRounds } = useHistory()
 
   return (
     <div className="page">
@@ -20,11 +12,15 @@ export default function History() {
         <h1>Historik</h1>
         <button className="btn-ghost" onClick={() => navigate('/')}>← Hem</button>
       </div>
-      <HistoryList
-        history={history}
-        onDelete={handleDelete}
-        onDeleteAll={handleDeleteAll}
-      />
+      {loading ? (
+        <p style={{ color: 'var(--text-2)', textAlign: 'center', paddingTop: 32 }}>Laddar...</p>
+      ) : (
+        <HistoryList
+          history={history}
+          onDelete={deleteRound}
+          onDeleteAll={deleteAllRounds}
+        />
+      )}
     </div>
   )
 }

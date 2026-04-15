@@ -1,7 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import { vi } from 'vitest'
 import { GameProvider, gameReducer } from '../context/GameContext'
 import Summary from '../pages/Summary'
+
+const mockSaveRound = vi.fn()
+vi.mock('../hooks/useHistory', () => ({
+  useHistory: () => ({ history: [], loading: false, saveRound: mockSaveRound, deleteRound: vi.fn(), deleteAllRounds: vi.fn() }),
+}))
 
 function makeGame() {
   let state = gameReducer(null, {
@@ -16,6 +22,7 @@ function makeGame() {
 }
 
 beforeEach(() => {
+  mockSaveRound.mockClear()
   localStorage.clear()
   localStorage.setItem('udisk_active_game', JSON.stringify(makeGame()))
 })
@@ -45,7 +52,6 @@ test('shows all player totals', () => {
 
 test('saves to history on render', () => {
   renderSummary()
-  const history = JSON.parse(localStorage.getItem('udisk_history') ?? '[]')
-  expect(history).toHaveLength(1)
-  expect(history[0].winner).toBe('Anton')
+  expect(mockSaveRound).toHaveBeenCalledOnce()
+  expect(mockSaveRound.mock.calls[0][0].winner).toBe('Anton')
 })

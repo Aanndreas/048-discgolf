@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
-import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useHistory } from '../hooks/useHistory'
 import { CelebrationScreen } from '../components/CelebrationScreen'
 import { Scorecard } from '../components/Scorecard'
 import { getPlayerStats, getWinner, getAllTotals } from '../utils/scoring'
@@ -17,7 +17,7 @@ function formatRelPar(n) {
 export default function Summary() {
   const navigate = useNavigate()
   const { state, dispatch } = useGame()
-  const [history, setHistory] = useLocalStorage('udisk_history', [])
+  const { saveRound } = useHistory()
   const [showDetail, setShowDetail] = useState(false)
   const [showScorecard, setShowScorecard] = useState(false)
   const savedRef = useRef(false)
@@ -35,7 +35,7 @@ export default function Summary() {
       scores: state.scores,
       winner,
     }
-    setHistory(prev => [entry, ...prev])
+    saveRound(entry)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!state) {
