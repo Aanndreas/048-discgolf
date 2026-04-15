@@ -12,10 +12,12 @@ test('shows dash when score is null', () => {
   expect(screen.getByText('–')).toBeInTheDocument()
 })
 
-test('calls onIncrement when + is clicked', () => {
+test('calls onIncrement when + is pressed and released', () => {
   const onIncrement = vi.fn()
   render(<PlayerScoreRow player="Anton" score={3} onIncrement={onIncrement} onDecrement={() => {}} />)
-  fireEvent.click(screen.getByText('+'))
+  const btn = screen.getByText('+')
+  fireEvent.pointerDown(btn)
+  fireEvent.pointerUp(btn)
   expect(onIncrement).toHaveBeenCalledTimes(1)
 })
 

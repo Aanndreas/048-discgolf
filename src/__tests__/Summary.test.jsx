@@ -32,7 +32,9 @@ function renderSummary() {
 
 test('shows winner name', () => {
   renderSummary()
-  expect(screen.getByText(/grattis anton/i)).toBeInTheDocument()
+  const hero = screen.getByTestId('celebration-hero')
+  expect(hero.textContent).toMatch(/grattis/i)
+  expect(hero.textContent).toMatch(/Anton/i)
 })
 
 test('shows all player totals', () => {

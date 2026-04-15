@@ -17,19 +17,19 @@ function renderSetup() {
 
 test('shows built-in courses', () => {
   renderSetup()
-  expect(screen.getByText('Mora')).toBeInTheDocument()
+  expect(screen.getByText('Hemus')).toBeInTheDocument()
   expect(screen.getByText('Orsa')).toBeInTheDocument()
 })
 
 test('Starta runda button is disabled when no players added', () => {
   renderSetup()
-  fireEvent.click(screen.getByText('Mora'))
+  fireEvent.click(screen.getByText('Hemus'))
   expect(screen.getByText(/starta runda/i)).toBeDisabled()
 })
 
 test('can add a player and enable start button', () => {
   renderSetup()
-  fireEvent.click(screen.getByText('Mora'))
+  fireEvent.click(screen.getByText('Hemus'))
   const input = screen.getByPlaceholderText(/lägg till spelare/i)
   fireEvent.change(input, { target: { value: 'Anton' } })
   fireEvent.click(screen.getByText('Lägg till'))
