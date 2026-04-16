@@ -6,6 +6,7 @@ import { ScorePanel } from '../components/ScorePanel'
 import { Scorecard } from '../components/Scorecard'
 import { getAllTotals } from '../utils/scoring'
 import { BUILT_IN_COURSES } from '../data/courses'
+import { PageCredit } from '../components/PageCredit'
 
 export default function Game() {
   const navigate = useNavigate()
@@ -210,7 +211,7 @@ export default function Game() {
         >
           Avbryt runda
         </button>
-
+        <PageCredit />
       </div>
 
     </div>

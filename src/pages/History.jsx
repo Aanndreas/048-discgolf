@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useHistory } from '../hooks/useHistory'
 import { HistoryList } from '../components/HistoryList'
+import { PageCredit } from '../components/PageCredit'
 
 export default function History() {
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ export default function History() {
           onDeleteAll={deleteAllRounds}
         />
       )}
+      <PageCredit />
     </div>
   )
 }

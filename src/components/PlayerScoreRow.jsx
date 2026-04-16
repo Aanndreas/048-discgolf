@@ -7,8 +7,9 @@ function formatTime(date) {
 export function PlayerScoreRow({ player, score, lastChanged, onIncrement, onDecrement, onSetScore }) {
   const [editing, setEditing] = useState(false)
   const [rawVal, setRawVal] = useState('')
-  const holdTimerRef = useRef(null)
-  const holdFiredRef = useRef(false)
+  const holdTimerRef = useRef(null)   // initial 1.5s delay
+  const holdIntervalRef = useRef(null) // repeating +5 every 600ms
+  const holdFiredRef = useRef(false)   // did hold trigger at least once?
 
   function startEdit() {
     setRawVal(score !== null ? String(score) : '')
@@ -21,29 +22,39 @@ export function PlayerScoreRow({ player, score, lastChanged, onIncrement, onDecr
     setEditing(false)
   }
 
+  function stopHold() {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current)
+      holdTimerRef.current = null
+    }
+    if (holdIntervalRef.current) {
+      clearInterval(holdIntervalRef.current)
+      holdIntervalRef.current = null
+    }
+  }
+
   function handleIncrementStart() {
     holdFiredRef.current = false
+    // After 1.5s: first +5, then repeat every 600ms
     holdTimerRef.current = setTimeout(() => {
       holdFiredRef.current = true
       holdTimerRef.current = null
       onIncrement(5)
+      holdIntervalRef.current = setInterval(() => {
+        onIncrement(5)
+      }, 600)
     }, 1500)
   }
 
   function handleIncrementEnd() {
-    if (holdTimerRef.current) {
-      clearTimeout(holdTimerRef.current)
-      holdTimerRef.current = null
-      if (!holdFiredRef.current) onIncrement(1)
-    }
+    const wasPending = holdTimerRef.current !== null
+    stopHold()
+    if (wasPending && !holdFiredRef.current) onIncrement(1)
   }
 
   function handleIncrementCancel() {
-    if (holdTimerRef.current) {
-      clearTimeout(holdTimerRef.current)
-      holdTimerRef.current = null
-      holdFiredRef.current = false
-    }
+    holdFiredRef.current = false
+    stopHold()
   }
 
   return (

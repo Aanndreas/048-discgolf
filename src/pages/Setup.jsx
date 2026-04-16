@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { CourseSelector } from '../components/CourseSelector'
 import { PlayerSelector } from '../components/PlayerSelector'
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { PageCredit } from '../components/PageCredit'
 import { useGame } from '../context/GameContext'
 import { BUILT_IN_COURSES } from '../data/courses'
 
@@ -125,6 +126,7 @@ export default function Setup() {
       >
         Starta runda
       </button>
+      <PageCredit />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
+import { PageCredit } from '../components/PageCredit'
 import { useHistory } from '../hooks/useHistory'
 import { CelebrationScreen } from '../components/CelebrationScreen'
 import { Scorecard } from '../components/Scorecard'
@@ -162,6 +163,7 @@ export default function Summary() {
       <button className="btn-primary" style={{ width: '100%', marginTop: 'auto' }} onClick={handleNewGame}>
         Ny runda
       </button>
+      <PageCredit />
     </div>
   )
 }

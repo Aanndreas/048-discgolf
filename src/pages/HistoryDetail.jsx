@@ -5,6 +5,7 @@ import { Scorecard } from '../components/Scorecard'
 import { getPlayerStats, getAllTotals } from '../utils/scoring'
 import { BUILT_IN_COURSES } from '../data/courses'
 import { useState } from 'react'
+import { PageCredit } from '../components/PageCredit'
 
 function formatRelPar(n) {
   if (n === null) return null
@@ -144,7 +145,7 @@ export default function HistoryDetail() {
       <button className="btn-ghost" style={{ width: '100%', marginTop: 'auto' }} onClick={() => navigate('/history')}>
         ← Tillbaka till historik
       </button>
-
+      <PageCredit />
     </div>
   )
 }
