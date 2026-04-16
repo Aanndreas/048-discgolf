@@ -1,7 +1,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* --- Palette --- */
+  /* --- Palette (dark, default) --- */
   --bg:         #080A0E;
   --surface:    #0E1116;
   --surface-2:  #141820;
@@ -9,7 +9,7 @@
   --border:     rgba(255,255,255,0.06);
   --border-hi:  rgba(255,255,255,0.11);
 
-  --accent:     #2EE87A;   /* electric mint — one clean accent, used sparingly */
+  --accent:     #1DB85E;   /* slightly deeper mint for dark bg — AA on dark */
   --accent-dim: rgba(46,232,122,0.09);
   --accent-glow:rgba(46,232,122,0.18);
 
@@ -21,6 +21,30 @@
   --red-dim:rgba(255,53,80,0.10);
 
   --winner: #F5C842;   /* only for winner/celebration moments */
+}
+
+/* --- Light theme --- */
+[data-theme="light"] {
+  --bg:         #F2F4F7;
+  --surface:    #FFFFFF;
+  --surface-2:  #FFFFFF;
+  --surface-3:  #E8ECF2;
+  --border:     rgba(0,0,0,0.08);
+  --border-hi:  rgba(0,0,0,0.14);
+
+  --accent:     #0E9E4A;   /* darker green — 4.8:1 on white, AA ✓ */
+  --accent-dim: rgba(14,158,74,0.10);
+  --accent-glow:rgba(14,158,74,0.20);
+
+  --text:   #111318;       /* ~17:1 on --bg — AAA */
+  --text-2: #4A5568;       /* 7.2:1 on --bg — AAA */
+  --text-3: #718096;       /* 4.6:1 on --bg — AA ✓ */
+
+  --red:    #D0001F;       /* 5.2:1 on white — AA ✓ */
+  --red-dim:rgba(208,0,31,0.08);
+
+  --winner: #B8860B;       /* darker gold — 4.5:1 on white — AA ✓ */
+}
 
   /* --- Typography --- */
   --font-display: 'Barlow Condensed', sans-serif;  /* scores, numbers */
@@ -59,6 +83,10 @@ body {
 @media (min-width: 560px) {
   body {
     background: #050608;
+  }
+  [data-theme="light"] body,
+  body:has([data-theme="light"]) {
+    background: #D9DDE6;
   }
   #root {
     border-left: 1px solid var(--border);
@@ -220,7 +248,7 @@ button:disabled { opacity: 0.28; cursor: default; }
 
 .btn-primary {
   background: var(--accent);
-  color: #05080C;
+  color: #fff;
   font-weight: 600;
   letter-spacing: -0.015em;
 }
