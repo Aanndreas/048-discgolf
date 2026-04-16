@@ -172,9 +172,7 @@ export default function Game() {
             onClick={() => setShowScorecard(s => !s)}
             aria-label={showScorecard ? 'Visa poäng' : 'Visa poängkort'}
           >
-            <span className="fold-tab-icon">
-              {showScorecard ? '◀' : '▶'}
-            </span>
+            <span className="fold-tab-icon">≡</span>
           </button>
         </div>
 

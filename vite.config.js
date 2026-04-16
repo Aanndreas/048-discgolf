@@ -8,13 +8,17 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'uDisk',
-        short_name: 'uDisk',
+        name: '048 Disc Golf',
+        short_name: '048',
         description: 'Disc Golf Score Tracker för Dalarna',
-        theme_color: '#1a1a2e',
-        background_color: '#1a1a2e',
+        theme_color: '#080A0E',
+        background_color: '#080A0E',
         display: 'standalone',
         start_url: '/',
+        icons: [
+          { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+        ],
       },
     }),
   ],
