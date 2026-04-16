@@ -26,6 +26,17 @@ html {
   --red-dim:rgba(255,53,80,0.10);
 
   --winner: #F5C842;   /* only for winner/celebration moments */
+
+  /* --- Typography --- */
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-ui:      'DM Sans', -apple-system, sans-serif;
+
+  /* --- Spacing & Shape --- */
+  --r:    10px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --gap:  14px;
+  --pad:  20px;
 }
 
 /* --- Light theme --- */
@@ -49,18 +60,6 @@ html {
   --red-dim:rgba(208,0,31,0.08);
 
   --winner: #B8860B;       /* darker gold — 4.5:1 on white — AA ✓ */
-}
-
-  /* --- Typography --- */
-  --font-display: 'Barlow Condensed', sans-serif;  /* scores, numbers */
-  --font-ui:      'DM Sans', -apple-system, sans-serif;
-
-  /* --- Spacing & Shape --- */
-  --r:    10px;
-  --r-lg: 16px;
-  --r-xl: 22px;
-  --gap:  14px;
-  --pad:  20px;
 }
 
 /* ============================================================
@@ -88,10 +87,6 @@ body {
 @media (min-width: 560px) {
   body {
     background: #050608;
-  }
-  [data-theme="light"] body,
-  body:has([data-theme="light"]) {
-    background: #D9DDE6;
   }
   #root {
     border-left: 1px solid var(--border);
