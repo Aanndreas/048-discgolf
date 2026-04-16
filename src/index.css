@@ -148,7 +148,7 @@ h2 {
    LAYOUT
 ============================================================ */
 .page {
-  padding: var(--pad) var(--pad) calc(var(--pad) + 36px);
+  padding: var(--pad) var(--pad) calc(var(--pad) + 20px);
   display: flex;
   flex-direction: column;
   gap: var(--gap);

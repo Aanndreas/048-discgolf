@@ -20,54 +20,30 @@ function useTheme() {
   return { theme, toggle }
 }
 
-function GlobalFooter({ theme, onToggleTheme }) {
+function ThemeToggle({ theme, onToggleTheme }) {
   const { pathname } = useLocation()
   const isGame = pathname === '/game'
-  const isHome = pathname === '/'
   return (
-    <div style={{
-      position: 'fixed',
-      bottom: 8,
-      left: 0,
-      right: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 10,
-      pointerEvents: 'none',
-      zIndex: 10,
-    }}>
-      {!isHome && (
-        <span style={{
-          fontFamily: 'var(--font-display)',
-          fontWeight: 700,
-          fontSize: '0.5625rem',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: 'var(--text-3)',
-          opacity: isGame ? 0.35 : 0.7,
-        }}>
-          Ihopkastad av Andreas Lundin · 2026 · Dalarna
-        </span>
-      )}
-      <button
-        onClick={onToggleTheme}
-        aria-label="Byt tema"
-        style={{
-          pointerEvents: 'all',
-          background: 'none',
-          border: 'none',
-          padding: '2px 4px',
-          fontSize: '0.85rem',
-          lineHeight: 1,
-          opacity: isGame ? 0.35 : 0.55,
-          cursor: 'pointer',
-          color: 'var(--text-3)',
-        }}
-      >
-        {theme === 'dark' ? '☀︎' : '☽'}
-      </button>
-    </div>
+    <button
+      onClick={onToggleTheme}
+      aria-label="Byt tema"
+      style={{
+        position: 'fixed',
+        bottom: 10,
+        right: 14,
+        zIndex: 50,
+        background: 'none',
+        border: 'none',
+        padding: '4px',
+        fontSize: '1rem',
+        lineHeight: 1,
+        opacity: isGame ? 0.25 : 0.45,
+        cursor: 'pointer',
+        color: 'var(--text-3)',
+      }}
+    >
+      {theme === 'dark' ? '☀︎' : '☽'}
+    </button>
   )
 }
 
@@ -75,7 +51,7 @@ function AppInner() {
   const { theme, toggle } = useTheme()
   return (
     <>
-      <GlobalFooter theme={theme} onToggleTheme={toggle} />
+      <ThemeToggle theme={theme} onToggleTheme={toggle} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/setup" element={<Setup />} />
