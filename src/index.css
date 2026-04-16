@@ -1,5 +1,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  background: var(--bg); /* iOS Safari shows html bg during overscroll bounce */
+  height: 100%;
+}
+
 :root {
   /* --- Palette (dark, default) --- */
   --bg:         #080A0E;
@@ -506,6 +511,7 @@ input:focus {
 .flip-face {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  background: var(--bg); /* Safari renders 3D faces white without explicit bg */
 }
 
 .flip-face-back {
