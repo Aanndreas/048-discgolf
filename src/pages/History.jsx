@@ -11,7 +11,10 @@ export default function History() {
     <div className="page">
       <div className="row" style={{ justifyContent: 'space-between' }}>
         <h1>Historik</h1>
-        <button className="btn-ghost" onClick={() => navigate('/')}>← Hem</button>
+        <div className="row" style={{ gap: 6 }}>
+          <button className="btn-ghost" onClick={() => navigate('/stats')}>Statistik</button>
+          <button className="btn-ghost" onClick={() => navigate('/')}>← Hem</button>
+        </div>
       </div>
       {loading ? (
         <p style={{ color: 'var(--text-2)', textAlign: 'center', paddingTop: 32 }}>Laddar...</p>

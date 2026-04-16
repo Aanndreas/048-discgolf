@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
+const GROUP_KEY = 'udisk_group'
+function getGroupCode() {
+  return localStorage.getItem(GROUP_KEY) || '048'
+}
+
 function rowToEntry(row) {
   return {
     id: row.id,
@@ -14,7 +19,7 @@ function rowToEntry(row) {
   }
 }
 
-function entryToRow(entry) {
+function entryToRow(entry, groupCode) {
   const holes = entry.holes
     ?? (entry.players ? Object.values(entry.scores)[0]?.length ?? 18 : 18)
   return {
@@ -26,6 +31,7 @@ function entryToRow(entry) {
     scores: entry.scores,
     winner: entry.winner,
     holes,
+    group_code: groupCode,
   }
 }
 
@@ -39,6 +45,8 @@ export function useHistory() {
       return
     }
 
+    const groupCode = getGroupCode()
+
     async function init() {
       // One-time migration from localStorage
       try {
@@ -46,17 +54,18 @@ export function useHistory() {
         if (raw) {
           const entries = JSON.parse(raw)
           if (Array.isArray(entries) && entries.length > 0) {
-            const rows = entries.map(entryToRow)
+            const rows = entries.map(e => entryToRow(e, groupCode))
             const { error } = await supabase.from('rounds').upsert(rows, { onConflict: 'id' })
             if (!error) localStorage.removeItem('udisk_history')
           }
         }
       } catch {}
 
-      // Fetch all rounds
+      // Fetch rounds for this group
       const { data, error } = await supabase
         .from('rounds')
         .select('*')
+        .eq('group_code', groupCode)
         .order('created_at', { ascending: false })
 
       if (!error && data) setHistory(data.map(rowToEntry))
@@ -68,7 +77,8 @@ export function useHistory() {
 
   async function saveRound(entry) {
     if (!supabase) return
-    const { error } = await supabase.from('rounds').insert(entryToRow(entry))
+    const groupCode = getGroupCode()
+    const { error } = await supabase.from('rounds').insert(entryToRow(entry, groupCode))
     if (!error) setHistory(prev => [entry, ...prev])
   }
 
@@ -80,7 +90,8 @@ export function useHistory() {
 
   async function deleteAllRounds() {
     if (!supabase) return
-    const { error } = await supabase.from('rounds').delete().neq('id', '')
+    const groupCode = getGroupCode()
+    const { error } = await supabase.from('rounds').delete().eq('group_code', groupCode)
     if (!error) setHistory([])
   }
 

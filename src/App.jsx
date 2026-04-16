@@ -7,6 +7,7 @@ import Game from './pages/Game'
 import Summary from './pages/Summary'
 import History from './pages/History'
 import HistoryDetail from './pages/HistoryDetail'
+import Stats from './pages/Stats'
 
 function useTheme() {
   const [theme, setTheme] = useState(() =>
@@ -59,6 +60,7 @@ function AppInner() {
         <Route path="/summary" element={<Summary />} />
         <Route path="/history" element={<History />} />
         <Route path="/history/:id" element={<HistoryDetail />} />
+        <Route path="/stats" element={<Stats />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

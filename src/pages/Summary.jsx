@@ -59,6 +59,21 @@ export default function Summary() {
     navigate('/')
   }
 
+  async function handleShare() {
+    const lines = sortedPlayers.map((p, i) => {
+      const medals = ['🥇', '🥈', '🥉']
+      const medal = medals[i] ?? `${i + 1}.`
+      return `${medal} ${p} — ${totals[p]} kast`
+    })
+    const text = `048 Disc Golf · ${courseName} · ${date}\n\n${lines.join('\n')}`
+    if (navigator.share) {
+      await navigator.share({ title: '048 Disc Golf', text })
+    } else {
+      await navigator.clipboard.writeText(text)
+      alert('Resultat kopierat!')
+    }
+  }
+
   return (
     <div className="page">
       <button className="btn-ghost" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/')}>← Hem</button>
@@ -160,9 +175,14 @@ export default function Summary() {
         <Scorecard scores={scores} players={players} holes={holes} currentHole={-1} />
       )}
 
-      <button className="btn-primary" style={{ width: '100%', marginTop: 'auto' }} onClick={handleNewGame}>
-        Ny runda
-      </button>
+      <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
+        <button className="btn-ghost" style={{ flex: 1 }} onClick={handleShare}>
+          Dela resultat 📤
+        </button>
+        <button className="btn-primary" style={{ flex: 1 }} onClick={handleNewGame}>
+          Ny runda
+        </button>
+      </div>
       <PageCredit />
     </div>
   )

@@ -1,15 +1,64 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
+import { useGroupCode } from '../hooks/useGroupCode'
 import logo from '../assets/images/048_logo_png.png'
 
 export default function Home() {
   const navigate = useNavigate()
   const { state, dispatch } = useGame()
+  const { code, saveCode, isSet } = useGroupCode()
+  const [inputCode, setInputCode] = useState('')
+  const [showCodeChange, setShowCodeChange] = useState(false)
 
   function handleAbandon() {
     if (confirm('Avbryta pågående runda? Poängen sparas inte.')) {
       dispatch({ type: 'CLEAR_GAME' })
     }
+  }
+
+  function handleCodeSubmit(e) {
+    e.preventDefault()
+    if (inputCode.trim().length > 0) {
+      saveCode(inputCode)
+      setShowCodeChange(false)
+      setInputCode('')
+    }
+  }
+
+  // First-time setup screen
+  if (!isSet) {
+    return (
+      <div className="page" style={{ justifyContent: 'center', minHeight: '100dvh' }}>
+        <div style={{ textAlign: 'center', marginBottom: 8 }}>
+          <img src={logo} alt="048 Disc Golf"
+            style={{ width: 140, height: 'auto', display: 'block', margin: '0 auto',
+              filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.4))' }} />
+        </div>
+        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text)', marginBottom: 4 }}>Vad är er gruppkod?</div>
+            <div style={{ fontSize: '0.8125rem', color: 'var(--text-2)' }}>
+              Tre tecken som identifierar ert gäng. Alla med samma kod delar historik.
+            </div>
+          </div>
+          <form onSubmit={handleCodeSubmit} style={{ display: 'flex', gap: 8 }}>
+            <input
+              autoFocus
+              maxLength={3}
+              placeholder="048"
+              value={inputCode}
+              onChange={e => setInputCode(e.target.value.toUpperCase())}
+              style={{ flex: 1, textAlign: 'center', fontFamily: 'var(--font-display)',
+                fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.15em' }}
+            />
+            <button className="btn-primary" type="submit" style={{ flexShrink: 0 }}>
+              Kör!
+            </button>
+          </form>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -23,16 +72,35 @@ export default function Home() {
           style={{ width: 200, height: 'auto', display: 'block', margin: '0 auto', filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.4))' }}
         />
 
-        <div style={{
-          fontSize: '0.6875rem',
-          fontWeight: 600,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: 'var(--text-3)',
-          marginTop: 14,
-        }}>
-          Disc Golf · Dalarna
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 14 }}>
+          <div style={{
+            fontSize: '0.6875rem', fontWeight: 600, letterSpacing: '0.14em',
+            textTransform: 'uppercase', color: 'var(--text-3)',
+          }}>
+            Disc Golf · Dalarna
+          </div>
+          <button
+            onClick={() => { setShowCodeChange(s => !s); setInputCode(code) }}
+            style={{ background: 'var(--accent-dim)', border: '1px solid rgba(46,232,122,0.2)',
+              borderRadius: 100, padding: '2px 8px', fontSize: '0.6875rem', fontWeight: 700,
+              letterSpacing: '0.12em', color: 'var(--accent)', lineHeight: 1.6 }}
+          >
+            {code}
+          </button>
         </div>
+        {showCodeChange && (
+          <form onSubmit={handleCodeSubmit}
+            style={{ display: 'flex', gap: 8, marginTop: 10, justifyContent: 'center' }}>
+            <input maxLength={3} value={inputCode} autoFocus
+              onChange={e => setInputCode(e.target.value.toUpperCase())}
+              style={{ width: 80, textAlign: 'center', fontFamily: 'var(--font-display)',
+                fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.15em', padding: '6px 10px' }}
+            />
+            <button className="btn-primary" type="submit" style={{ padding: '6px 14px', fontSize: '0.875rem' }}>
+              Spara
+            </button>
+          </form>
+        )}
       </div>
 
       {/* ── Accent line ── */}

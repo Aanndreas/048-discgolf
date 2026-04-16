@@ -33,14 +33,19 @@ export function PlayerScoreRow({ player, score, lastChanged, onIncrement, onDecr
     }
   }
 
+  function vibrate(ms = 8) {
+    navigator.vibrate?.(ms)
+  }
+
   function handleIncrementStart() {
     holdFiredRef.current = false
-    // After 1.5s: first +5, then repeat every 600ms
     holdTimerRef.current = setTimeout(() => {
       holdFiredRef.current = true
       holdTimerRef.current = null
+      vibrate(18)
       onIncrement(5)
       holdIntervalRef.current = setInterval(() => {
+        vibrate(12)
         onIncrement(5)
       }, 600)
     }, 1500)
@@ -49,7 +54,10 @@ export function PlayerScoreRow({ player, score, lastChanged, onIncrement, onDecr
   function handleIncrementEnd() {
     const wasPending = holdTimerRef.current !== null
     stopHold()
-    if (wasPending && !holdFiredRef.current) onIncrement(1)
+    if (wasPending && !holdFiredRef.current) {
+      vibrate(6)
+      onIncrement(1)
+    }
   }
 
   function handleIncrementCancel() {
@@ -71,7 +79,7 @@ export function PlayerScoreRow({ player, score, lastChanged, onIncrement, onDecr
       <div className="score-controls">
         <button
           className="score-btn"
-          onClick={onDecrement}
+          onClick={() => { vibrate(6); onDecrement() }}
           disabled={score === null || score <= 1}
         >
           −
