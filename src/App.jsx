@@ -37,7 +37,7 @@ function ThemeToggle({ theme, onToggleTheme }) {
   )
 }
 
-const NO_NAV_PATHS = ['/setup', '/game']
+const NO_NAV_PATHS = ['/game']
 
 function AppInner() {
   const { theme, toggle } = useTheme()
