@@ -36,7 +36,7 @@ export default function Summary() {
       scores: state.scores,
       winner,
     }
-    saveRound(entry)
+    ;(async () => { await saveRound(entry); dispatch({ type: 'CLEAR_GAME' }) })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!state) {
