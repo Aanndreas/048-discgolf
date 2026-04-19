@@ -1029,11 +1029,56 @@ input:focus {
 }
 
 /* ============================================================
+   BOTTOM NAV
+============================================================ */
+:root { --nav-h: 62px; }
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 40;
+}
+
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 8px 12px;
+  color: var(--text-3);
+  text-decoration: none;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-item:hover { color: var(--text-2); opacity: 1; }
+.bottom-nav-item.is-active { color: var(--accent); }
+
+/* Bump page bottom padding so content isn't hidden behind nav */
+.page { padding-bottom: calc(var(--pad) + var(--nav-h) + 16px); }
+
+/* Game and Setup have no nav — restore original bottom padding */
+.page--no-gap { padding-bottom: calc(var(--pad) + 20px); }
+
+/* ============================================================
    APP THEME TOGGLE
 ============================================================ */
 .theme-toggle {
   position: fixed;
-  bottom: 10px;
+  bottom: calc(var(--nav-h) + 10px);
   right: 14px;
   z-index: 50;
   background: none;

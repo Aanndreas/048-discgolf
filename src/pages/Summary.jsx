@@ -23,41 +23,38 @@ export default function Summary() {
   const [showScorecard, setShowScorecard] = useState(false)
   const savedRef = useRef(false)
 
+  // Snapshot game data at mount so we can render after CLEAR_GAME fires
+  const [roundData] = useState(() => state)
+
   useEffect(() => {
-    if (!state || savedRef.current) return
+    if (!roundData || savedRef.current) return
     savedRef.current = true
-    const winner = getWinner(state.scores, state.players)
+    const winner = getWinner(roundData.scores, roundData.players)
     const entry = {
       id: crypto.randomUUID(),
-      courseId: state.courseId,
-      courseName: state.courseName,
+      courseId: roundData.courseId,
+      courseName: roundData.courseName,
       date: new Date().toISOString().slice(0, 10),
-      players: state.players,
-      scores: state.scores,
+      players: roundData.players,
+      scores: roundData.scores,
       winner,
     }
     ;(async () => { await saveRound(entry); dispatch({ type: 'CLEAR_GAME' }) })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!state) {
+  if (!roundData) {
     navigate('/')
     return null
   }
 
-  const { players, scores, courseName, holes } = state
+  const { players, scores, courseName, holes } = roundData
   const date = new Date().toISOString().slice(0, 10)
 
-  const courseData = BUILT_IN_COURSES.find(c => c.id === state.courseId)
+  const courseData = BUILT_IN_COURSES.find(c => c.id === roundData.courseId)
   const par = courseData?.par ?? null
 
-  // Sort players by total for stats — leaderboard order
   const totals = getAllTotals(scores, players)
   const sortedPlayers = [...players].sort((a, b) => totals[a] - totals[b])
-
-  function handleNewGame() {
-    dispatch({ type: 'CLEAR_GAME' })
-    navigate('/')
-  }
 
   async function handleShare() {
     const lines = sortedPlayers.map((p, i) => {
@@ -76,7 +73,6 @@ export default function Summary() {
 
   return (
     <div className="page">
-      <button className="btn-ghost btn-back" onClick={() => navigate('/')}>← Hem</button>
 
       {saveStatus === 'saving' && <p className="save-status save-status--saving">Sparar runda…</p>}
       {saveStatus === 'saved'  && <p className="save-status save-status--saved">✓ Runda sparad</p>}
@@ -98,7 +94,6 @@ export default function Summary() {
             return (
               <div key={player} className="card col" style={{ gap: 12 }}>
 
-                {/* ── Top row: name + total ── */}
                 <div className="player-stat-header">
                   <div className="row">
                     <span className="stats-rank" style={{ color: rank === 0 ? 'var(--winner)' : 'var(--text-3)' }}>
@@ -117,7 +112,6 @@ export default function Summary() {
                   </div>
                 </div>
 
-                {/* ── Par distribution (only when par data exists) ── */}
                 {par && (
                   <div className="stat-pills-row">
                     <div className="stat-pill stat-pill--under">
@@ -135,7 +129,6 @@ export default function Summary() {
                   </div>
                 )}
 
-                {/* ── Secondary stats row ── */}
                 <div className="stats-footer">
                   {[
                     { label: 'Snitt', val: stats.avg.toFixed(1) },
@@ -156,7 +149,6 @@ export default function Summary() {
         </div>
       )}
 
-      {/* ── Poängkort ── */}
       <button className="btn-ghost btn-full" onClick={() => setShowScorecard(s => !s)}>
         {showScorecard ? '▲ Dölj poängkort' : '▼ Visa poängkort'}
       </button>
@@ -169,7 +161,7 @@ export default function Summary() {
         <button className="btn-ghost flex-1" onClick={handleShare}>
           Dela resultat 📤
         </button>
-        <button className="btn-primary flex-1" onClick={handleNewGame}>
+        <button className="btn-primary flex-1" onClick={() => navigate('/setup')}>
           Ny runda
         </button>
       </div>

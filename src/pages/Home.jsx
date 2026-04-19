@@ -26,7 +26,6 @@ export default function Home() {
     }
   }
 
-  // First-time setup screen
   if (!isSet) {
     return (
       <div className="page page--centered">
@@ -61,7 +60,6 @@ export default function Home() {
   return (
     <div className="page page--centered">
 
-      {/* ── Logo ── */}
       <div className="logo-wrap">
         <img src={logo} alt="048 Disc Golf" className="logo-img" />
 
@@ -90,10 +88,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* ── Accent line ── */}
       <div className="accent-line" />
 
-      {/* ── Actions ── */}
       <div className="actions-list">
         <button
           className="btn-primary btn-ny-runda"
@@ -119,16 +115,8 @@ export default function Home() {
             </button>
           </div>
         )}
-
-        <button
-          className="btn-ghost btn-history"
-          onClick={() => navigate('/history')}
-        >
-          Historik
-        </button>
       </div>
 
-      {/* ── Credit ── */}
       <div className="page-credit">
         <div className="page-credit-text">
           Ihopkastad av Andreas Lundin · 2026 · Dalarna

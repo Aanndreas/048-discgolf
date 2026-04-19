@@ -44,12 +44,10 @@ export default function HistoryDetail() {
   return (
     <div className="page">
 
-      {/* ── Back ── */}
       <button className="btn-ghost btn-back" onClick={() => navigate('/history')}>
         ← Historik
       </button>
 
-      {/* ── Celebration ── */}
       <CelebrationScreen
         players={players}
         scores={scores}
@@ -57,7 +55,6 @@ export default function HistoryDetail() {
         date={date}
       />
 
-      {/* ── Stats ── */}
       <button className="btn-ghost btn-full" onClick={() => setShowStats(s => !s)}>
         {showStats ? '▲ Dölj statistik' : '▼ Visa statistik per spelare'}
       </button>
@@ -119,7 +116,6 @@ export default function HistoryDetail() {
         </div>
       )}
 
-      {/* ── Poängkort ── */}
       <button className="btn-ghost btn-full" onClick={() => setShowScorecard(s => !s)}>
         {showScorecard ? '▲ Dölj poängkort' : '▼ Visa poängkort'}
       </button>
@@ -128,9 +124,6 @@ export default function HistoryDetail() {
         <Scorecard scores={scores} players={players} holes={holeCount} currentHole={-1} />
       )}
 
-      <button className="btn-ghost btn-full mt-auto" onClick={() => navigate('/history')}>
-        ← Tillbaka till historik
-      </button>
       <PageCredit />
     </div>
   )

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { GameProvider } from './context/GameContext'
+import { BottomNav } from './components/BottomNav'
 import Home from './pages/Home'
 import Setup from './pages/Setup'
 import Game from './pages/Game'
@@ -36,11 +37,17 @@ function ThemeToggle({ theme, onToggleTheme }) {
   )
 }
 
+const NO_NAV_PATHS = ['/setup', '/game']
+
 function AppInner() {
   const { theme, toggle } = useTheme()
+  const { pathname } = useLocation()
+  const showNav = !NO_NAV_PATHS.includes(pathname)
+
   return (
     <>
       <ThemeToggle theme={theme} onToggleTheme={toggle} />
+      {showNav && <BottomNav />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/setup" element={<Setup />} />

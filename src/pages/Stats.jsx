@@ -10,7 +10,6 @@ export default function Stats() {
   if (loading) {
     return (
       <div className="page">
-        <button className="btn-ghost btn-back" onClick={() => navigate('/history')}>← Historik</button>
         <p className="empty-state">Laddar...</p>
       </div>
     )
@@ -19,13 +18,11 @@ export default function Stats() {
   if (history.length === 0) {
     return (
       <div className="page">
-        <button className="btn-ghost btn-back" onClick={() => navigate('/history')}>← Historik</button>
         <p className="empty-state">Inga rundor ännu.</p>
       </div>
     )
   }
 
-  // Aggregate per course
   const courseMap = {}
   for (const entry of history) {
     const key = entry.courseName
@@ -33,7 +30,6 @@ export default function Stats() {
     courseMap[key].rounds.push(entry)
   }
 
-  // Per-player aggregates across all rounds
   const playerMap = {}
   for (const entry of history) {
     const totals = getAllTotals(entry.scores, entry.players)
@@ -48,10 +44,8 @@ export default function Stats() {
 
   return (
     <div className="page">
-      <button className="btn-ghost btn-back" onClick={() => navigate('/history')}>← Historik</button>
       <h1>Statistik</h1>
 
-      {/* ── Per player ── */}
       <section>
         <h2 style={{ marginBottom: 10 }}>Spelare</h2>
         <div className="col">
@@ -78,12 +72,10 @@ export default function Stats() {
         </div>
       </section>
 
-      {/* ── Per course ── */}
       <section>
         <h2 style={{ marginBottom: 10 }}>Per bana</h2>
         <div className="col">
           {Object.values(courseMap).map(({ name, rounds }) => {
-            // Per-player stats on this course
             const coursePlayerMap = {}
             for (const entry of rounds) {
               const totals = getAllTotals(entry.scores, entry.players)
