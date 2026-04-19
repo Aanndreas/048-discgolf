@@ -107,6 +107,10 @@ export function useHistory() {
       setHistory(prev => [entry, ...prev])
       setSaveStatus('saved')
     } catch {
+      // Supabase failed — fall back to localStorage so the round is never lost
+      const updated = [entry, ...lsLoad()]
+      lsSave(updated)
+      setHistory(updated)
       setSaveStatus('error')
     }
   }
