@@ -13,22 +13,21 @@ export function PlayerSelector({ players, favorites, onAdd, onRemove, onToggleFa
   const suggestions = favorites.filter(f => !players.includes(f))
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div className="col">
       {players.map(name => (
-        <div key={name} className="card row" style={{ justifyContent: 'space-between' }}>
+        <div key={name} className="card row row-between">
           <span>{name}</span>
           <div className="row">
             <button
-              className="btn-ghost"
-              style={{ padding: '4px 10px' }}
+              className="btn-ghost btn-sm"
               onClick={() => onToggleFavorite(name)}
               title={favorites.includes(name) ? 'Ta bort från favoriter' : 'Spara som favorit'}
             >
               {favorites.includes(name) ? '★' : '☆'}
             </button>
             <button
-              className="btn-ghost"
-              style={{ padding: '4px 10px', color: 'var(--highlight)' }}
+              className="btn-ghost btn-sm"
+              style={{ color: 'var(--highlight)' }}
               onClick={() => onRemove(name)}
             >
               ✕
@@ -39,10 +38,8 @@ export function PlayerSelector({ players, favorites, onAdd, onRemove, onToggleFa
 
       {suggestions.length > 0 && (
         <div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginBottom: 6 }}>
-            Favoriter
-          </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <p className="favorites-label">Favoriter</p>
+          <div className="favorites-list">
             {suggestions.map(name => (
               <button key={name} className="btn-ghost" onClick={() => onAdd(name)}>
                 + {name}
@@ -58,9 +55,9 @@ export function PlayerSelector({ players, favorites, onAdd, onRemove, onToggleFa
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleAdd()}
-          style={{ flex: 1 }}
+          className="flex-1"
         />
-        <button onClick={handleAdd} style={{ flexShrink: 0 }}>Lägg till</button>
+        <button onClick={handleAdd} className="flex-shrink-0">Lägg till</button>
       </div>
     </div>
   )

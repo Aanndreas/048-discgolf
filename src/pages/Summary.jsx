@@ -76,47 +76,36 @@ export default function Summary() {
 
   return (
     <div className="page">
-      <button className="btn-ghost" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/')}>← Hem</button>
+      <button className="btn-ghost btn-back" onClick={() => navigate('/')}>← Hem</button>
       <CelebrationScreen players={players} scores={scores} courseName={courseName} date={date} />
 
       {/* ── Per-player stats ── */}
-      <button className="btn-ghost" style={{ width: '100%' }} onClick={() => setShowDetail(d => !d)}>
+      <button className="btn-ghost btn-full" onClick={() => setShowDetail(d => !d)}>
         {showDetail ? '▲ Dölj statistik' : '▼ Visa statistik per spelare'}
       </button>
 
       {showDetail && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="col" style={{ gap: 10 }}>
           {sortedPlayers.map((player, rank) => {
             const stats = getPlayerStats(scores, player, par)
             const rel = formatRelPar(stats.relativePar)
 
             return (
-              <div key={player} className="card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div key={player} className="card col" style={{ gap: 12 }}>
 
                 {/* ── Top row: name + total ── */}
-                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{
-                      fontFamily: 'var(--font-display)', fontWeight: 900,
-                      fontSize: '1rem', color: rank === 0 ? 'var(--winner)' : 'var(--text-3)',
-                      width: 18, textAlign: 'center',
-                    }}>
+                <div className="player-stat-header">
+                  <div className="row">
+                    <span className="stats-rank" style={{ color: rank === 0 ? 'var(--winner)' : 'var(--text-3)' }}>
                       {rank + 1}
                     </span>
-                    <span style={{ fontWeight: 600, fontSize: '1rem', color: 'var(--text)' }}>
-                      {player}
-                    </span>
+                    <span className="player-name">{player}</span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                    <span style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: '2rem', color: 'var(--text)', lineHeight: 1 }}>
-                      {stats.total}
-                    </span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-3)', fontWeight: 500 }}>kast</span>
+                  <div className="total-display">
+                    <span className="stat-num-lg">{stats.total}</span>
+                    <span className="kast-label">kast</span>
                     {rel && (
-                      <span style={{
-                        fontSize: '0.8125rem', fontWeight: 700,
-                        color: rel.color, marginLeft: 2,
-                      }}>
+                      <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: rel.color, marginLeft: 2 }}>
                         {rel.label}
                       </span>
                     )}
@@ -125,7 +114,7 @@ export default function Summary() {
 
                 {/* ── Par distribution (only when par data exists) ── */}
                 {par && (
-                  <div style={{ display: 'flex', gap: 6 }}>
+                  <div className="stat-pills-row">
                     <div className="stat-pill stat-pill--under">
                       <span className="stat-pill-val">{stats.underPar}</span>
                       <span className="stat-pill-lbl">under</span>
@@ -142,20 +131,16 @@ export default function Summary() {
                 )}
 
                 {/* ── Secondary stats row ── */}
-                <div style={{ display: 'flex', gap: 0, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
+                <div className="stats-footer">
                   {[
                     { label: 'Snitt', val: stats.avg.toFixed(1) },
                     { label: 'Bäst', val: stats.best ?? '—' },
                     { label: 'Sämst', val: stats.worst ?? '—' },
                     { label: 'Hål', val: stats.holesPlayed },
                   ].map(({ label, val }) => (
-                    <div key={label} style={{ flex: 1, textAlign: 'center' }}>
-                      <div style={{ fontSize: '0.6875rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-3)', marginBottom: 3 }}>
-                        {label}
-                      </div>
-                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: '1.25rem', color: 'var(--text)' }}>
-                        {val}
-                      </div>
+                    <div key={label} className="stat-col">
+                      <div className="stat-label" style={{ marginBottom: 3 }}>{label}</div>
+                      <div className="stat-num">{val}</div>
                     </div>
                   ))}
                 </div>
@@ -167,7 +152,7 @@ export default function Summary() {
       )}
 
       {/* ── Poängkort ── */}
-      <button className="btn-ghost" style={{ width: '100%' }} onClick={() => setShowScorecard(s => !s)}>
+      <button className="btn-ghost btn-full" onClick={() => setShowScorecard(s => !s)}>
         {showScorecard ? '▲ Dölj poängkort' : '▼ Visa poängkort'}
       </button>
 
@@ -175,11 +160,11 @@ export default function Summary() {
         <Scorecard scores={scores} players={players} holes={holes} currentHole={-1} />
       )}
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 'auto' }}>
-        <button className="btn-ghost" style={{ flex: 1 }} onClick={handleShare}>
+      <div className="row mt-auto">
+        <button className="btn-ghost flex-1" onClick={handleShare}>
           Dela resultat 📤
         </button>
-        <button className="btn-primary" style={{ flex: 1 }} onClick={handleNewGame}>
+        <button className="btn-primary flex-1" onClick={handleNewGame}>
           Ny runda
         </button>
       </div>

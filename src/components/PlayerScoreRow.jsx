@@ -67,10 +67,10 @@ export function PlayerScoreRow({ player, score, lastChanged, onIncrement, onDecr
 
   return (
     <div className="score-row">
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <div className="score-player-info">
         <span className="score-player-name">{player}</span>
         {lastChanged && (
-          <span style={{ fontSize: '0.6875rem', color: 'var(--text-3)', letterSpacing: '0.02em' }}>
+          <span className="score-timestamp">
             Senast registrerat: {formatTime(lastChanged)}
           </span>
         )}
@@ -106,7 +106,6 @@ export function PlayerScoreRow({ player, score, lastChanged, onIncrement, onDecr
             className={`score-value ${score === null ? 'is-empty' : 'score-pop'}`}
             data-empty={score === null ? 'true' : undefined}
             onClick={startEdit}
-            style={{ cursor: 'text' }}
           >
             {score ?? '–'}
           </span>

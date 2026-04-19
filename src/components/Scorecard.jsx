@@ -5,7 +5,7 @@ export function Scorecard({ scores, players, holes, currentHole }) {
   const holeNumbers = Array.from({ length: holes }, (_, i) => i)
 
   return (
-    <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+    <div className="scorecard-scroll">
       <table className="scorecard-table">
         <thead>
           <tr>

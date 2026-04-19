@@ -58,7 +58,7 @@ export default function Setup() {
 
   return (
     <div className="page">
-      <button className="btn-ghost" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/')}>← Hem</button>
+      <button className="btn-ghost btn-back" onClick={() => navigate('/')}>← Hem</button>
       <h1>Ny runda</h1>
 
       {/* ── Course selection ── */}
@@ -69,42 +69,26 @@ export default function Setup() {
           onSelect={setSelectedCourse}
           onAddCourse={handleAddCourse}
         />
-        <div style={{
-          marginTop: 10,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-          background: selectedCourse ? 'var(--accent-dim)' : 'var(--surface-2)',
-          border: `1px solid ${selectedCourse ? 'rgba(46,232,122,0.2)' : 'var(--border)'}`,
-          borderRadius: 'var(--r-lg)',
-          padding: '12px 16px',
-          transition: 'background 0.2s, border-color 0.2s',
-        }}>
+        <div className={`course-selected ${selectedCourse ? 'course-selected--active' : 'course-selected--empty'}`}>
           {selectedCourse ? (
             <>
-              <span style={{ color: 'var(--accent)', fontSize: '1rem', lineHeight: 1 }}>✓</span>
+              <span className="check-icon">✓</span>
               <div>
-                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.5rem', color: 'var(--text)', letterSpacing: '-0.01em', lineHeight: 1 }}>
-                  {selectedCourse.name}
-                </div>
-                <div style={{ fontSize: '0.8125rem', color: 'var(--accent)', marginTop: 4, fontWeight: 500 }}>
-                  {selectedCourse.holes} hål
-                </div>
+                <div className="course-name-selected">{selectedCourse.name}</div>
+                <div className="course-holes-selected">{selectedCourse.holes} hål</div>
               </div>
             </>
           ) : (
             <>
-              <span style={{ fontSize: '1rem', lineHeight: 1, color: 'var(--text-3)' }}>○</span>
-              <div style={{ fontSize: '0.9375rem', color: 'var(--text-3)', fontStyle: 'italic' }}>
-                Vald bana: —
-              </div>
+              <span className="unselected-icon">○</span>
+              <div className="course-placeholder">Vald bana: —</div>
             </>
           )}
         </div>
       </section>
 
       {/* ── Extra breathing room between sections ── */}
-      <div style={{ height: 8 }} />
+      <div className="spacer-sm" />
 
       {/* ── Player selection ── */}
       <section>
@@ -119,8 +103,7 @@ export default function Setup() {
       </section>
 
       <button
-        className="btn-primary"
-        style={{ width: '100%', marginTop: 'auto', padding: '16px' }}
+        className="btn-primary btn-start"
         disabled={!selectedCourse || players.length === 0}
         onClick={handleStart}
       >

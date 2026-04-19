@@ -21,18 +21,17 @@ export function CourseSelector({ courses, onSelect, onAddCourse }) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div className="col">
       {courses.map(course => (
         <button
           key={course.id}
-          className="btn-ghost"
-          style={{ textAlign: 'left', padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}
+          className="btn-ghost course-btn"
           onClick={() => onSelect(course)}
         >
-          <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.5rem', color: 'var(--text)', letterSpacing: '-0.01em', lineHeight: 1 }}>
+          <span className="course-name-display">
             {course.name}
           </span>
-          <span style={{ color: 'var(--text-2)', fontWeight: 500, fontSize: '0.875rem', flexShrink: 0 }}>
+          <span className="course-holes-count">
             {course.holes} hål
           </span>
         </button>
@@ -43,7 +42,7 @@ export function CourseSelector({ courses, onSelect, onAddCourse }) {
           + Lägg till bana
         </button>
       ) : (
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="card col">
           <input
             placeholder="Banans namn"
             value={customName}
@@ -59,7 +58,7 @@ export function CourseSelector({ courses, onSelect, onAddCourse }) {
             placeholder="Antal hål"
           />
           <div className="row">
-            <button className="btn-primary" onClick={handleAdd} style={{ flex: 1 }}>
+            <button className="btn-primary flex-1" onClick={handleAdd}>
               Spara och välj
             </button>
             <button className="btn-ghost" onClick={() => setShowCustom(false)}>

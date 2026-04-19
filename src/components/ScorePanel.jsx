@@ -6,33 +6,21 @@ export function ScorePanel({ scores, players }) {
   const totals = getAllTotals(scores, players)
 
   return (
-    <div style={{ marginTop: 4 }}>
+    <div className="score-panel">
       <button
-        className="btn-ghost"
-        style={{ width: '100%', fontSize: '0.8125rem' }}
+        className="btn-ghost btn-full"
+        style={{ fontSize: '0.8125rem' }}
         onClick={() => setOpen(o => !o)}
       >
         {open ? '▲ Dölj totalpoäng' : '▼ Visa totalpoäng'}
       </button>
 
       {open && (
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          padding: '14px 16px',
-          background: 'var(--surface-2)',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--r-lg)',
-          marginTop: 8,
-        }}>
+        <div className="score-panel-body">
           {players.map(p => (
-            <div key={p} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '0.6875rem', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--text-2)', marginBottom: 4 }}>
-                {p}
-              </div>
-              <div className="num-xl" style={{ fontSize: '2rem', color: 'var(--text)' }}>
-                {totals[p]}
-              </div>
+            <div key={p} className="score-panel-player">
+              <div className="score-panel-label">{p}</div>
+              <div className="num-xl score-panel-total">{totals[p]}</div>
             </div>
           ))}
         </div>

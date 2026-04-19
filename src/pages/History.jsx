@@ -9,7 +9,7 @@ export default function History() {
 
   return (
     <div className="page">
-      <div className="row" style={{ justifyContent: 'space-between' }}>
+      <div className="row row-between">
         <h1>Historik</h1>
         <div className="row" style={{ gap: 6 }}>
           <button className="btn-ghost" onClick={() => navigate('/stats')}>Statistik</button>
@@ -17,7 +17,7 @@ export default function History() {
         </div>
       </div>
       {loading ? (
-        <p style={{ color: 'var(--text-2)', textAlign: 'center', paddingTop: 32 }}>Laddar...</p>
+        <p className="empty-state">Laddar...</p>
       ) : (
         <HistoryList
           history={history}

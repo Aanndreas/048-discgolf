@@ -8,11 +8,11 @@ export function CelebrationScreen({ players, scores, courseName, date }) {
   const rankClass = ['rank-1', 'rank-2', 'rank-3', '', '', '']
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div className="col" style={{ gap: 20 }}>
 
       {/* ── Celebration hero ── */}
-      <div data-testid="celebration-hero" style={{ textAlign: 'center', paddingTop: 8 }}>
-        <span className="course-badge" style={{ marginBottom: 20, display: 'inline-flex' }}>
+      <div data-testid="celebration-hero" className="celebration-hero">
+        <span className="course-badge course-badge--celebration">
           {courseName} · {date}
         </span>
 
@@ -26,7 +26,7 @@ export function CelebrationScreen({ players, scores, courseName, date }) {
       </div>
 
       {/* ── Leaderboard ── */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div className="col">
         {sorted.map((player, i) => (
           <div key={player} className={`leaderboard-row ${i === 0 ? 'is-winner' : ''}`}>
             <span className={`rank-badge ${rankClass[i] || ''}`}>

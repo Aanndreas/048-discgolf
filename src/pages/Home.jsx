@@ -29,30 +29,27 @@ export default function Home() {
   // First-time setup screen
   if (!isSet) {
     return (
-      <div className="page" style={{ justifyContent: 'center', minHeight: '100dvh' }}>
-        <div style={{ textAlign: 'center', marginBottom: 8 }}>
-          <img src={logo} alt="048 Disc Golf"
-            style={{ width: 140, height: 'auto', display: 'block', margin: '0 auto',
-              filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.4))' }} />
+      <div className="page page--centered">
+        <div className="logo-wrap--setup">
+          <img src={logo} alt="048 Disc Golf" className="logo-img logo-img--sm" />
         </div>
-        <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div className="card col" style={{ gap: 14 }}>
           <div>
-            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text)', marginBottom: 4 }}>Vad är er gruppkod?</div>
-            <div style={{ fontSize: '0.8125rem', color: 'var(--text-2)' }}>
+            <div className="code-prompt-title">Vad är er gruppkod?</div>
+            <div className="code-prompt-desc">
               Tre tecken som identifierar ert gäng. Alla med samma kod delar historik.
             </div>
           </div>
-          <form onSubmit={handleCodeSubmit} style={{ display: 'flex', gap: 8 }}>
+          <form onSubmit={handleCodeSubmit} className="code-form">
             <input
               autoFocus
               maxLength={3}
               placeholder="048"
               value={inputCode}
               onChange={e => setInputCode(e.target.value.toUpperCase())}
-              style={{ flex: 1, textAlign: 'center', fontFamily: 'var(--font-display)',
-                fontSize: '1.5rem', fontWeight: 700, letterSpacing: '0.15em' }}
+              className="code-input"
             />
-            <button className="btn-primary" type="submit" style={{ flexShrink: 0 }}>
+            <button className="btn-primary flex-shrink-0" type="submit">
               Kör!
             </button>
           </form>
@@ -62,41 +59,31 @@ export default function Home() {
   }
 
   return (
-    <div className="page" style={{ justifyContent: 'center', minHeight: '100dvh' }}>
+    <div className="page page--centered">
 
       {/* ── Logo ── */}
-      <div style={{ textAlign: 'center', marginBottom: 4 }}>
-        <img
-          src={logo}
-          alt="048 Disc Golf"
-          style={{ width: 200, height: 'auto', display: 'block', margin: '0 auto', filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.4))' }}
-        />
+      <div className="logo-wrap">
+        <img src={logo} alt="048 Disc Golf" className="logo-img" />
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 14 }}>
-          <div style={{
-            fontSize: '0.6875rem', fontWeight: 600, letterSpacing: '0.14em',
-            textTransform: 'uppercase', color: 'var(--text-3)',
-          }}>
-            Disc Golf · Dalarna
-          </div>
+        <div className="location-bar">
+          <div className="location-label">Disc Golf · Dalarna</div>
           <button
+            className="group-badge"
             onClick={() => { setShowCodeChange(s => !s); setInputCode(code) }}
-            style={{ background: 'var(--accent-dim)', border: '1px solid rgba(46,232,122,0.2)',
-              borderRadius: 100, padding: '2px 8px', fontSize: '0.6875rem', fontWeight: 700,
-              letterSpacing: '0.12em', color: 'var(--accent)', lineHeight: 1.6 }}
           >
             {code}
           </button>
         </div>
         {showCodeChange && (
-          <form onSubmit={handleCodeSubmit}
-            style={{ display: 'flex', gap: 8, marginTop: 10, justifyContent: 'center' }}>
-            <input maxLength={3} value={inputCode} autoFocus
+          <form onSubmit={handleCodeSubmit} className="code-change-form">
+            <input
+              maxLength={3}
+              value={inputCode}
+              autoFocus
               onChange={e => setInputCode(e.target.value.toUpperCase())}
-              style={{ width: 80, textAlign: 'center', fontFamily: 'var(--font-display)',
-                fontSize: '1.2rem', fontWeight: 700, letterSpacing: '0.15em', padding: '6px 10px' }}
+              className="code-input-sm"
             />
-            <button className="btn-primary" type="submit" style={{ padding: '6px 14px', fontSize: '0.875rem' }}>
+            <button className="btn-primary btn-sm" type="submit">
               Spara
             </button>
           </form>
@@ -104,56 +91,28 @@ export default function Home() {
       </div>
 
       {/* ── Accent line ── */}
-      <div style={{
-        width: 40,
-        height: 2,
-        background: 'var(--accent)',
-        borderRadius: 2,
-        margin: '12px auto 28px',
-      }} />
+      <div className="accent-line" />
 
       {/* ── Actions ── */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div className="actions-list">
         <button
-          className="btn-primary"
-          style={{ width: '100%', padding: '17px 20px', fontSize: '1rem', borderRadius: 'var(--r-lg)' }}
+          className="btn-primary btn-ny-runda"
           onClick={() => navigate('/setup')}
         >
           Ny runda
         </button>
 
         {state && (
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button
-              style={{
-                flex: 1,
-                padding: '14px 20px',
-                borderRadius: 'var(--r-lg)',
-                background: 'var(--surface-2)',
-                border: '1px solid var(--border-hi)',
-                textAlign: 'left',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 3,
-              }}
-              onClick={() => navigate('/game')}
-            >
-              <span style={{ fontWeight: 600, color: 'var(--text)' }}>Fortsätt pågående runda</span>
-              <span style={{ fontSize: '0.8125rem', color: 'var(--text-2)', fontWeight: 400 }}>
+          <div className="row">
+            <button className="btn-resume" onClick={() => navigate('/game')}>
+              <span className="btn-resume-title">Fortsätt pågående runda</span>
+              <span className="btn-resume-subtitle">
                 {state.courseName} · Hål {state.currentHole + 1} / {state.holes}
               </span>
             </button>
             <button
               onClick={handleAbandon}
-              style={{
-                padding: '0 14px',
-                borderRadius: 'var(--r-lg)',
-                background: 'var(--surface-2)',
-                border: '1px solid var(--border-hi)',
-                color: 'var(--red)',
-                fontSize: '1.1rem',
-                flexShrink: 0,
-              }}
+              className="btn-abandon-small"
               aria-label="Avbryt runda"
             >
               ✕
@@ -162,8 +121,7 @@ export default function Home() {
         )}
 
         <button
-          className="btn-ghost"
-          style={{ width: '100%', padding: '13px 20px', borderRadius: 'var(--r-lg)' }}
+          className="btn-ghost btn-history"
           onClick={() => navigate('/history')}
         >
           Historik
@@ -171,16 +129,8 @@ export default function Home() {
       </div>
 
       {/* ── Credit ── */}
-      <div style={{ marginTop: 'auto', paddingTop: 24, textAlign: 'center' }}>
-        <div style={{
-          fontFamily: 'var(--font-display)',
-          fontWeight: 700,
-          fontSize: '0.6875rem',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: 'var(--text-3)',
-          lineHeight: 1.7,
-        }}>
+      <div className="page-credit">
+        <div className="page-credit-text">
           Ihopkastad av Andreas Lundin · 2026 · Dalarna
         </div>
       </div>

@@ -10,8 +10,8 @@ export default function Stats() {
   if (loading) {
     return (
       <div className="page">
-        <button className="btn-ghost" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/history')}>← Historik</button>
-        <p style={{ color: 'var(--text-2)', textAlign: 'center', paddingTop: 32 }}>Laddar...</p>
+        <button className="btn-ghost btn-back" onClick={() => navigate('/history')}>← Historik</button>
+        <p className="empty-state">Laddar...</p>
       </div>
     )
   }
@@ -19,8 +19,8 @@ export default function Stats() {
   if (history.length === 0) {
     return (
       <div className="page">
-        <button className="btn-ghost" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/history')}>← Historik</button>
-        <p style={{ color: 'var(--text-2)', textAlign: 'center', paddingTop: 32 }}>Inga rundor ännu.</p>
+        <button className="btn-ghost btn-back" onClick={() => navigate('/history')}>← Historik</button>
+        <p className="empty-state">Inga rundor ännu.</p>
       </div>
     )
   }
@@ -48,31 +48,28 @@ export default function Stats() {
 
   return (
     <div className="page">
-      <button className="btn-ghost" style={{ alignSelf: 'flex-start' }} onClick={() => navigate('/history')}>← Historik</button>
+      <button className="btn-ghost btn-back" onClick={() => navigate('/history')}>← Historik</button>
       <h1>Statistik</h1>
 
       {/* ── Per player ── */}
       <section>
         <h2 style={{ marginBottom: 10 }}>Spelare</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="col">
           {playerEntries.map(([player, s], i) => (
-            <div key={player} className="card" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{
-                fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: '1.1rem',
-                color: i === 0 ? 'var(--winner)' : 'var(--text-3)', width: 20, textAlign: 'center',
-              }}>{i + 1}</span>
-              <span style={{ flex: 1, fontWeight: 600, color: 'var(--text)' }}>{player}</span>
-              <div style={{ display: 'flex', gap: 16, textAlign: 'center' }}>
+            <div key={player} className="card stats-player-row">
+              <span className="stats-rank" style={{ color: i === 0 ? 'var(--winner)' : 'var(--text-3)' }}>
+                {i + 1}
+              </span>
+              <span className="player-name flex-1">{player}</span>
+              <div className="stats-nums">
                 {[
                   { label: 'Vinster', val: s.wins },
                   { label: 'Rundor', val: s.rounds },
                   { label: 'Snitt', val: s.rounds > 0 ? Math.round(s.totalKast / s.rounds) : '—' },
                 ].map(({ label, val }) => (
                   <div key={label}>
-                    <div style={{ fontSize: '0.6rem', fontWeight: 600, letterSpacing: '0.08em',
-                      textTransform: 'uppercase', color: 'var(--text-3)', marginBottom: 2 }}>{label}</div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900,
-                      fontSize: '1.1rem', color: 'var(--text)' }}>{val}</div>
+                    <div className="stats-num-label">{label}</div>
+                    <div className="stats-num-val">{val}</div>
                   </div>
                 ))}
               </div>
@@ -84,7 +81,7 @@ export default function Stats() {
       {/* ── Per course ── */}
       <section>
         <h2 style={{ marginBottom: 10 }}>Per bana</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="col">
           {Object.values(courseMap).map(({ name, rounds }) => {
             // Per-player stats on this course
             const coursePlayerMap = {}
@@ -102,23 +99,22 @@ export default function Stats() {
               .sort((a, b) => a.avg - b.avg)[0]
 
             return (
-              <div key={name} className="card" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                  <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text)' }}>{name}</span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-3)' }}>{rounds.length} {rounds.length === 1 ? 'runda' : 'rundor'}</span>
+              <div key={name} className="card col">
+                <div className="course-card-header">
+                  <span className="course-card-name">{name}</span>
+                  <span className="course-card-count">{rounds.length} {rounds.length === 1 ? 'runda' : 'rundor'}</span>
                 </div>
                 {best && (
-                  <div style={{ fontSize: '0.8125rem', color: 'var(--text-2)' }}>
-                    Bäst snitt: <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{best.player}</span>
-                    <span style={{ color: 'var(--text-3)' }}> · {best.avg.toFixed(1)} kast/runda</span>
+                  <div className="course-best-info">
+                    Bäst snitt: <span className="course-best-player">{best.player}</span>
+                    <span className="course-best-avg"> · {best.avg.toFixed(1)} kast/runda</span>
                   </div>
                 )}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 2 }}>
+                <div className="player-pills">
                   {Object.entries(coursePlayerMap)
                     .sort((a, b) => (a[1].totalKast / a[1].rounds) - (b[1].totalKast / b[1].rounds))
                     .map(([player, s]) => (
-                      <div key={player} style={{ fontSize: '0.75rem', background: 'var(--surface-3)',
-                        borderRadius: 8, padding: '3px 8px', color: 'var(--text-2)' }}>
+                      <div key={player} className="player-pill">
                         {player} · {(s.totalKast / s.rounds).toFixed(1)} · {s.wins}🏆
                       </div>
                     ))}

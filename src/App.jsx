@@ -28,20 +28,8 @@ function ThemeToggle({ theme, onToggleTheme }) {
     <button
       onClick={onToggleTheme}
       aria-label="Byt tema"
-      style={{
-        position: 'fixed',
-        bottom: 10,
-        right: 14,
-        zIndex: 50,
-        background: 'none',
-        border: 'none',
-        padding: '4px',
-        fontSize: '1rem',
-        lineHeight: 1,
-        opacity: isGame ? 0.25 : 0.45,
-        cursor: 'pointer',
-        color: 'var(--text-3)',
-      }}
+      className="theme-toggle"
+      style={{ opacity: isGame ? 0.25 : 0.45 }}
     >
       {theme === 'dark' ? '☀︎' : '☽'}
     </button>
