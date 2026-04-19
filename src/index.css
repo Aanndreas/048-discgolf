@@ -1050,3 +1050,17 @@ input:focus {
 ============================================================ */
 .page--center { justify-content: center; align-items: center; }
 .text-secondary { color: var(--text-2); }
+
+/* ============================================================
+   SAVE STATUS
+============================================================ */
+.save-status {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 8px 14px;
+  border-radius: var(--r);
+}
+.save-status--saving { color: var(--text-2); background: var(--surface-2); border: 1px solid var(--border); }
+.save-status--saved  { color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(46,232,122,0.2); }
+.save-status--error  { color: var(--red);    background: var(--red-dim);    border: 1px solid rgba(255,53,80,0.2); }

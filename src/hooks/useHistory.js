@@ -1,9 +1,24 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
+const LS_KEY = 'udisk_history'
 const GROUP_KEY = 'udisk_group'
+
 function getGroupCode() {
   return localStorage.getItem(GROUP_KEY) || '048'
+}
+
+function lsLoad() {
+  try {
+    const raw = localStorage.getItem(LS_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch {
+    return []
+  }
+}
+
+function lsSave(entries) {
+  localStorage.setItem(LS_KEY, JSON.stringify(entries))
 }
 
 function rowToEntry(row) {
@@ -38,9 +53,11 @@ function entryToRow(entry, groupCode) {
 export function useHistory() {
   const [history, setHistory] = useState([])
   const [loading, setLoading] = useState(true)
+  const [saveStatus, setSaveStatus] = useState('idle') // 'idle' | 'saving' | 'saved' | 'error'
 
   useEffect(() => {
     if (!supabase) {
+      setHistory(lsLoad())
       setLoading(false)
       return
     }
@@ -50,18 +67,17 @@ export function useHistory() {
     async function init() {
       // One-time migration from localStorage
       try {
-        const raw = localStorage.getItem('udisk_history')
+        const raw = localStorage.getItem(LS_KEY)
         if (raw) {
           const entries = JSON.parse(raw)
           if (Array.isArray(entries) && entries.length > 0) {
             const rows = entries.map(e => entryToRow(e, groupCode))
             const { error } = await supabase.from('rounds').upsert(rows, { onConflict: 'id' })
-            if (!error) localStorage.removeItem('udisk_history')
+            if (!error) localStorage.removeItem(LS_KEY)
           }
         }
       } catch {}
 
-      // Fetch rounds for this group
       const { data, error } = await supabase
         .from('rounds')
         .select('*')
@@ -76,24 +92,46 @@ export function useHistory() {
   }, [])
 
   async function saveRound(entry) {
-    if (!supabase) return
-    const groupCode = getGroupCode()
-    const { error } = await supabase.from('rounds').insert(entryToRow(entry, groupCode))
-    if (!error) setHistory(prev => [entry, ...prev])
+    setSaveStatus('saving')
+    try {
+      if (!supabase) {
+        const updated = [entry, ...lsLoad()]
+        lsSave(updated)
+        setHistory(updated)
+        setSaveStatus('saved')
+        return
+      }
+      const groupCode = getGroupCode()
+      const { error } = await supabase.from('rounds').insert(entryToRow(entry, groupCode))
+      if (error) throw error
+      setHistory(prev => [entry, ...prev])
+      setSaveStatus('saved')
+    } catch {
+      setSaveStatus('error')
+    }
   }
 
   async function deleteRound(id) {
-    if (!supabase) return
+    if (!supabase) {
+      const updated = lsLoad().filter(e => e.id !== id)
+      lsSave(updated)
+      setHistory(updated)
+      return
+    }
     const { error } = await supabase.from('rounds').delete().eq('id', id)
     if (!error) setHistory(prev => prev.filter(e => e.id !== id))
   }
 
   async function deleteAllRounds() {
-    if (!supabase) return
+    if (!supabase) {
+      lsSave([])
+      setHistory([])
+      return
+    }
     const groupCode = getGroupCode()
     const { error } = await supabase.from('rounds').delete().eq('group_code', groupCode)
     if (!error) setHistory([])
   }
 
-  return { history, loading, saveRound, deleteRound, deleteAllRounds }
+  return { history, loading, saveRound, deleteRound, deleteAllRounds, saveStatus }
 }

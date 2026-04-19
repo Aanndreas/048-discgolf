@@ -18,7 +18,7 @@ function formatRelPar(n) {
 export default function Summary() {
   const navigate = useNavigate()
   const { state, dispatch } = useGame()
-  const { saveRound } = useHistory()
+  const { saveRound, saveStatus } = useHistory()
   const [showDetail, setShowDetail] = useState(false)
   const [showScorecard, setShowScorecard] = useState(false)
   const savedRef = useRef(false)
@@ -77,6 +77,11 @@ export default function Summary() {
   return (
     <div className="page">
       <button className="btn-ghost btn-back" onClick={() => navigate('/')}>← Hem</button>
+
+      {saveStatus === 'saving' && <p className="save-status save-status--saving">Sparar runda…</p>}
+      {saveStatus === 'saved'  && <p className="save-status save-status--saved">✓ Runda sparad</p>}
+      {saveStatus === 'error'  && <p className="save-status save-status--error">Fel vid sparning — försök igen</p>}
+
       <CelebrationScreen players={players} scores={scores} courseName={courseName} date={date} />
 
       {/* ── Per-player stats ── */}
