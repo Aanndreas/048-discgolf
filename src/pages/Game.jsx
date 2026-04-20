@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
 import { PlayerScoreRow } from '../components/PlayerScoreRow'
@@ -8,11 +8,28 @@ import { getAllTotals } from '../utils/scoring'
 import { BUILT_IN_COURSES } from '../data/courses'
 import { PageCredit } from '../components/PageCredit'
 
+function fmtElapsed(secs) {
+  const h = Math.floor(secs / 3600)
+  const m = Math.floor((secs % 3600) / 60)
+  const s = secs % 60
+  if (h > 0) return `${h}h ${m}m`
+  if (m > 0) return `${m}m ${String(s).padStart(2, '0')}s`
+  return `${s}s`
+}
+
 export default function Game() {
   const navigate = useNavigate()
   const { state, dispatch } = useGame()
   const [showScorecard, setShowScorecard] = useState(false)
   const [lastChanged, setLastChanged] = useState({})
+  const [elapsed, setElapsed] = useState(0)
+
+  useEffect(() => {
+    if (!state) return
+    const t0 = new Date(state.startedAt).getTime()
+    const id = setInterval(() => setElapsed(Math.floor((Date.now() - t0) / 1000)), 1000)
+    return () => clearInterval(id)
+  }, [state?.startedAt])
 
   if (!state) {
     navigate('/')
@@ -76,6 +93,10 @@ export default function Game() {
           <div>
             <div className="game-stat-label">Plats</div>
             <div className="game-info-value">{courseName}</div>
+          </div>
+          <div className="game-timer-col">
+            <div className="game-stat-label">Tid</div>
+            <div className="game-timer-val">{fmtElapsed(elapsed)}</div>
           </div>
           <div data-testid="hole-display" className="hole-display">
             <div className="game-stat-label">Hål{holePar ? ` · Par ${holePar}` : ''}</div>

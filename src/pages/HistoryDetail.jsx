@@ -7,6 +7,22 @@ import { BUILT_IN_COURSES } from '../data/courses'
 import { useState } from 'react'
 import { PageCredit } from '../components/PageCredit'
 
+function fmtSecs(s) {
+  if (!s) return '—'
+  const m = Math.floor(s / 60)
+  const sec = s % 60
+  if (m > 0) return `${m}m ${String(sec).padStart(2, '0')}s`
+  return `${sec}s`
+}
+
+function fmtDuration(secs) {
+  if (!secs) return '—'
+  const h = Math.floor(secs / 3600)
+  const m = Math.floor((secs % 3600) / 60)
+  if (h > 0) return `${h}h ${m}m`
+  return `${m}m`
+}
+
 function formatRelPar(n) {
   if (n === null) return null
   if (n === 0) return { label: 'E', color: 'var(--text-2)' }
@@ -34,7 +50,7 @@ export default function HistoryDetail() {
     )
   }
 
-  const { players, scores, courseName, courseId, date, holes } = entry
+  const { players, scores, courseName, courseId, date, holes, holeTimes, totalSeconds } = entry
   const courseData = BUILT_IN_COURSES.find(c => c.id === courseId)
   const par = courseData?.par ?? null
   const totals = getAllTotals(scores, players)
@@ -113,6 +129,27 @@ export default function HistoryDetail() {
               </div>
             )
           })}
+        </div>
+      )}
+
+      {holeTimes && holeTimes.length > 0 && (
+        <div className="card col" style={{ gap: 10 }}>
+          <div className="course-card-header">
+            <span className="course-card-name">Tider per hål</span>
+            {totalSeconds > 0 && <span className="course-card-count">Totalt {fmtDuration(totalSeconds)}</span>}
+          </div>
+          <div className="hole-times-grid">
+            {holeTimes.map((secs, i) => {
+              const isFastest = secs === Math.min(...holeTimes)
+              const isSlowest = secs === Math.max(...holeTimes)
+              return (
+                <div key={i} className={`hole-time-cell${isFastest ? ' hole-time-cell--fast' : isSlowest ? ' hole-time-cell--slow' : ''}`}>
+                  <span className="hole-time-num">{i + 1}</span>
+                  <span className="hole-time-val">{fmtSecs(secs)}</span>
+                </div>
+              )
+            })}
+          </div>
         </div>
       )}
 

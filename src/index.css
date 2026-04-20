@@ -900,6 +900,17 @@ input:focus {
 .hole-number-row { display: flex; align-items: baseline; gap: 3px; justify-content: flex-end; }
 .hole-num { font-size: 1.5rem; color: var(--text); }
 .hole-total { font-size: 0.8125rem; color: var(--text-3); font-weight: 400; }
+.game-timer-col { text-align: center; }
+.game-timer-val { font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.hole-times-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; }
+.hole-time-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; background: var(--surface-2); border-radius: var(--r); padding: 6px 4px; }
+.hole-time-cell--fast { background: color-mix(in srgb, var(--accent) 18%, var(--surface-2)); }
+.hole-time-cell--slow { background: color-mix(in srgb, var(--red) 18%, var(--surface-2)); }
+.hole-time-num { font-size: 0.625rem; font-weight: 700; color: var(--text-3); letter-spacing: 0.05em; }
+.hole-time-val { font-size: 0.75rem; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+.time-stat-row { display: flex; justify-content: space-between; align-items: center; }
+.time-stat-label { font-size: 0.875rem; color: var(--text-2); }
+.time-stat-val { font-size: 0.875rem; font-weight: 700; color: var(--text); }
 .progress-track { height: 2px; background: var(--surface-3); border-radius: 2px; overflow: hidden; margin-top: 8px; }
 .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
 .game-interactive { display: flex; flex-direction: column; gap: 8px; padding-bottom: 0; }

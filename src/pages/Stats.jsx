@@ -1,10 +1,16 @@
-import { useNavigate } from 'react-router-dom'
 import { useHistory } from '../hooks/useHistory'
 import { getAllTotals } from '../utils/scoring'
 import { PageCredit } from '../components/PageCredit'
 
+function fmtDuration(secs) {
+  if (!secs) return '—'
+  const h = Math.floor(secs / 3600)
+  const m = Math.floor((secs % 3600) / 60)
+  if (h > 0) return `${h}h ${m}m`
+  return `${m}m`
+}
+
 export default function Stats() {
-  const navigate = useNavigate()
   const { history, loading } = useHistory()
 
   if (loading) {
@@ -42,6 +48,19 @@ export default function Stats() {
   }
   const playerEntries = Object.entries(playerMap).sort((a, b) => b[1].wins - a[1].wins)
 
+  // Time stats
+  const roundsWithTime = history.filter(e => e.totalSeconds > 0)
+  const totalSecsAll = roundsWithTime.reduce((s, e) => s + e.totalSeconds, 0)
+  const avgRoundSecs = roundsWithTime.length > 0 ? Math.floor(totalSecsAll / roundsWithTime.length) : 0
+  const fastest = roundsWithTime.length > 0
+    ? roundsWithTime.reduce((a, b) => a.totalSeconds < b.totalSeconds ? a : b)
+    : null
+  const slowest = roundsWithTime.length > 0
+    ? roundsWithTime.reduce((a, b) => a.totalSeconds > b.totalSeconds ? a : b)
+    : null
+  const allHoleTimes = history.flatMap(e => e.holeTimes ?? []).filter(Boolean)
+  const avgHoleSecs = allHoleTimes.length > 0 ? Math.floor(allHoleTimes.reduce((a, b) => a + b, 0) / allHoleTimes.length) : 0
+
   return (
     <div className="page">
       <h1>Statistik</h1>
@@ -72,6 +91,40 @@ export default function Stats() {
         </div>
       </section>
 
+      {roundsWithTime.length > 0 && (
+        <section>
+          <h2 style={{ marginBottom: 10 }}>Tid</h2>
+          <div className="card col" style={{ gap: 12 }}>
+            <div className="time-stat-row">
+              <span className="time-stat-label">Kastat plast totalt</span>
+              <span className="time-stat-val">{fmtDuration(totalSecsAll)}</span>
+            </div>
+            <div className="time-stat-row">
+              <span className="time-stat-label">Snitt per runda</span>
+              <span className="time-stat-val">{fmtDuration(avgRoundSecs)}</span>
+            </div>
+            {avgHoleSecs > 0 && (
+              <div className="time-stat-row">
+                <span className="time-stat-label">Snitt per hål</span>
+                <span className="time-stat-val">{fmtDuration(avgHoleSecs)}</span>
+              </div>
+            )}
+            {fastest && (
+              <div className="time-stat-row">
+                <span className="time-stat-label">Snabbaste runda</span>
+                <span className="time-stat-val">{fmtDuration(fastest.totalSeconds)} · {fastest.courseName}</span>
+              </div>
+            )}
+            {slowest && slowest.id !== fastest?.id && (
+              <div className="time-stat-row">
+                <span className="time-stat-label">Längsta runda</span>
+                <span className="time-stat-val">{fmtDuration(slowest.totalSeconds)} · {slowest.courseName}</span>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       <section>
         <h2 style={{ marginBottom: 10 }}>Per bana</h2>
         <div className="col">
@@ -90,6 +143,10 @@ export default function Stats() {
               .map(([p, s]) => ({ player: p, avg: s.totalKast / s.rounds }))
               .sort((a, b) => a.avg - b.avg)[0]
 
+            const courseAvgSecs = rounds.filter(r => r.totalSeconds > 0).length > 0
+              ? Math.floor(rounds.filter(r => r.totalSeconds > 0).reduce((s, r) => s + r.totalSeconds, 0) / rounds.filter(r => r.totalSeconds > 0).length)
+              : 0
+
             return (
               <div key={name} className="card col">
                 <div className="course-card-header">
@@ -100,6 +157,11 @@ export default function Stats() {
                   <div className="course-best-info">
                     Bäst snitt: <span className="course-best-player">{best.player}</span>
                     <span className="course-best-avg"> · {best.avg.toFixed(1)} kast/runda</span>
+                  </div>
+                )}
+                {courseAvgSecs > 0 && (
+                  <div className="course-best-info">
+                    Snitttid: <span className="course-best-avg">{fmtDuration(courseAvgSecs)} per runda</span>
                   </div>
                 )}
                 <div className="player-pills">

@@ -8,6 +8,7 @@ export function gameReducer(state, action) {
       const { courseId, courseName, holes, players } = action.payload
       const scores = {}
       players.forEach(p => { scores[p] = Array(holes).fill(null) })
+      const now = new Date().toISOString()
       return {
         courseId,
         courseName,
@@ -15,7 +16,9 @@ export function gameReducer(state, action) {
         currentHole: 0,
         players,
         scores,
-        startedAt: new Date().toISOString(),
+        startedAt: now,
+        holeStartedAt: now,
+        holeTimes: [],
       }
     }
     case 'SET_SCORE': {
@@ -28,10 +31,23 @@ export function gameReducer(state, action) {
         },
       }
     }
-    case 'NEXT_HOLE':
-      return { ...state, currentHole: Math.min(state.currentHole + 1, state.holes - 1) }
+    case 'NEXT_HOLE': {
+      const now = new Date().toISOString()
+      const secs = Math.floor((Date.now() - new Date(state.holeStartedAt ?? state.startedAt).getTime()) / 1000)
+      return {
+        ...state,
+        currentHole: Math.min(state.currentHole + 1, state.holes - 1),
+        holeTimes: [...(state.holeTimes ?? []), secs],
+        holeStartedAt: now,
+      }
+    }
     case 'PREV_HOLE':
-      return { ...state, currentHole: Math.max(state.currentHole - 1, 0) }
+      return {
+        ...state,
+        currentHole: Math.max(state.currentHole - 1, 0),
+        holeTimes: (state.holeTimes ?? []).slice(0, -1),
+        holeStartedAt: new Date().toISOString(),
+      }
     case 'CLEAR_GAME':
       return null
     default:

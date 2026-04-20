@@ -30,6 +30,10 @@ export default function Summary() {
     if (!roundData || savedRef.current) return
     savedRef.current = true
     const winner = getWinner(roundData.scores, roundData.players)
+    const now = Date.now()
+    const lastHoleSecs = Math.floor((now - new Date(roundData.holeStartedAt ?? roundData.startedAt).getTime()) / 1000)
+    const holeTimes = [...(roundData.holeTimes ?? []), lastHoleSecs]
+    const totalSeconds = Math.floor((now - new Date(roundData.startedAt).getTime()) / 1000)
     const entry = {
       id: crypto.randomUUID(),
       courseId: roundData.courseId,
@@ -38,6 +42,8 @@ export default function Summary() {
       players: roundData.players,
       scores: roundData.scores,
       winner,
+      holeTimes,
+      totalSeconds,
     }
     ;(async () => { await saveRound(entry); dispatch({ type: 'CLEAR_GAME' }) })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps

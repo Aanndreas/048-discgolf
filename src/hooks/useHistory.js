@@ -31,6 +31,8 @@ function rowToEntry(row) {
     scores: row.scores,
     winner: row.winner,
     holes: row.holes,
+    holeTimes: row.hole_times ?? null,
+    totalSeconds: row.total_seconds ?? null,
   }
 }
 
@@ -47,6 +49,8 @@ function entryToRow(entry, groupCode) {
     winner: entry.winner,
     holes,
     group_code: groupCode,
+    hole_times: entry.holeTimes ?? null,
+    total_seconds: entry.totalSeconds ?? null,
   }
 }
 
